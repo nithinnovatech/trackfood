@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 export interface MenuItem {
   id: string;
@@ -24,8 +24,48 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
+const CART_KEY = 'fow_cart';
+
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Load cart from localStorage on mount
+  useEffect(() => {
+    const savedCart = localStorage.getItem(CART_KEY);
+    if (savedCart) {
+      try {
+        setCartItems(JSON.parse(savedCart));
+      } catch (e) {
+        console.error('Error loading cart:', e);
+        localStorage.removeItem(CART_KEY);
+      }
+    }
+    setIsLoaded(true);
+  }, []);
+
+  // Save cart to localStorage whenever it changes
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem(CART_KEY, JSON.stringify(cartItems));
+    }
+  }, [cartItems, isLoaded]);
+
+  // Sync cart across tabs
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === CART_KEY && e.newValue) {
+        try {
+          setCartItems(JSON.parse(e.newValue));
+        } catch (error) {
+          console.error('Error syncing cart:', error);
+        }
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   const addToCart = (item: MenuItem) => {
     setCartItems(prev => {
@@ -55,6 +95,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const clearCart = () => {
     setCartItems([]);
+    localStorage.removeItem(CART_KEY);
   };
 
   const getTotalItems = () => {
@@ -89,3 +130,4 @@ export const useCart = () => {
   }
   return context;
 };
+

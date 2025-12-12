@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ShoppingCart, X, Plus, Minus, Send, Trash2 } from 'lucide-react';
+import { ShoppingCart, X, Plus, Minus, Send, Trash2, CreditCard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/hooks/use-toast';
@@ -39,7 +39,7 @@ const Cart = () => {
     const whatsappUrl = `https://wa.me/14159611921?text=${encodeURIComponent(message)}`;
 
     window.open(whatsappUrl, '_blank');
-    
+
     toast({
       title: 'Redirecting to WhatsApp',
       description: 'Complete your order via WhatsApp!',
@@ -97,9 +97,8 @@ const Cart = () => {
 
       {/* Cart Sheet - Dynamic */}
       <div
-        className={`fixed right-0 top-0 h-full z-50 transition-all duration-500 ease-out ${
-          isOpen ? 'w-full sm:w-96' : 'w-0'
-        } overflow-hidden`}
+        className={`fixed right-0 top-0 h-full z-50 transition-all duration-500 ease-out ${isOpen ? 'w-full sm:w-96' : 'w-0'
+          } overflow-hidden`}
       >
         <div className="h-full flex flex-col bg-white dark:bg-gray-900 shadow-2xl">
           {/* Header */}
@@ -124,9 +123,8 @@ const Cart = () => {
           {/* Items Container */}
           <div className="flex-1 overflow-y-auto py-6 px-4">
             {cartItems.length === 0 ? (
-              <div className={`flex flex-col items-center justify-center h-full text-center transition-all duration-500 ${
-                showItems ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-              }`}>
+              <div className={`flex flex-col items-center justify-center h-full text-center transition-all duration-500 ${showItems ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                }`}>
                 <div className="bg-secondary/10 rounded-full p-6 mb-4">
                   <ShoppingCart className="h-16 w-16 text-muted-foreground" />
                 </div>
@@ -136,9 +134,8 @@ const Cart = () => {
                 </p>
               </div>
             ) : (
-              <div className={`space-y-3 transition-all duration-500 ${
-                showItems ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-              }`}>
+              <div className={`space-y-3 transition-all duration-500 ${showItems ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                }`}>
                 {cartItems.map((item, index) => (
                   <div
                     key={item.id}
@@ -214,17 +211,29 @@ const Cart = () => {
                 {/* Order Buttons */}
                 <div className="space-y-2">
                   <Button
-                    onClick={handleCheckout}
-                    className="w-full h-12 md:h-14 text-base md:text-lg bg-secondary text-secondary-foreground hover:bg-secondary/90 font-bold group shadow-lg hover:shadow-xl transition-all"
+                    onClick={() => {
+                      setIsOpen(false);
+                      window.location.href = '/checkout';
+                    }}
+                    className="w-full h-12 md:h-14 text-base md:text-lg bg-primary text-primary-foreground hover:bg-primary/90 font-bold group shadow-lg hover:shadow-xl transition-all"
                   >
-                    <Send className="mr-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                    <CreditCard className="mr-2 h-5 w-5" />
+                    Proceed to Checkout
+                  </Button>
+
+                  <Button
+                    onClick={handleCheckout}
+                    variant="outline"
+                    className="w-full h-11 border-2 border-secondary text-secondary hover:bg-secondary hover:text-secondary-foreground font-semibold"
+                  >
+                    <Send className="mr-2 h-4 w-4" />
                     Order via WhatsApp
                   </Button>
 
                   <Button
                     onClick={handleClearCart}
-                    variant="outline"
-                    className="w-full h-10 border-2 border-destructive/50 text-destructive hover:bg-destructive/10"
+                    variant="ghost"
+                    className="w-full h-10 text-destructive hover:bg-destructive/10"
                   >
                     <Trash2 className="mr-2 h-4 w-4" />
                     Clear Cart
