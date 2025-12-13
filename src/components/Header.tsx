@@ -1,23 +1,27 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, User, LogOut, ShoppingBag, ChevronDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Menu, Heart, ShoppingBag, User, LogOut, Package, MapPin } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useAuth } from "@/contexts/AuthContext";
-import logo from "@/assets/fow-logo.webp";
+} from '@/components/ui/dropdown-menu';
+import { useCart } from '@/contexts/CartContext';
+import { useAuth } from '@/contexts/AuthContext';
+import Cart from './Cart';
+import MegaMenu from './MegaMenu';
+import SearchBar from './SearchBar';
+import asianBasketLogo from '@/assets/asian-basket-logo-light.jpg';
 
 const Header = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { cartItems } = useCart();
   const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
-
-  const toggleMenu = () => setIsOpen(!isOpen);
 
   const handleLogout = () => {
     logout();
@@ -25,217 +29,130 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-primary shadow-lg">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <Link to="/">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-card shadow-sm border-b border-border">
+      {/* 1. Announcement Bar */}
+      <div className="bg-primary text-primary-foreground py-1.5 px-4 text-xs font-medium text-center hidden sm:block">
+        <p>🚚 Free Next Day Delivery on orders over €50! | 📞 Call us: +353 123 456 789</p>
+      </div>
+
+      {/* 2. Main Header */}
+      <div className="container mx-auto px-4 py-3 md:py-4">
+        <div className="flex items-center justify-between gap-4">
+
+          {/* Logo & Mobile Menu */}
+          <div className="flex items-center gap-3">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="md:hidden">
+                  <Menu className="h-6 w-6" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+                <nav className="flex flex-col gap-4 mt-8">
+                  <Link to="/" className="text-lg font-bold text-primary">Home</Link>
+                  <Link to="/orders" className="text-lg font-medium">My Orders</Link>
+                  <hr />
+                  <div className="space-y-2">
+                    <p className="text-sm font-semibold text-muted-foreground uppercase">Categories</p>
+                    <Link to="/cat/fruits" className="block py-2">Fruits & Veg</Link>
+                    <Link to="/cat/meat" className="block py-2">Meat & Poultry</Link>
+                    <Link to="/cat/seafood" className="block py-2">Seafood</Link>
+                  </div>
+                </nav>
+              </SheetContent>
+            </Sheet>
+
+            <Link to="/" className="flex items-center gap-2 group">
               <img
-                src={logo}
-                alt="Flavor on Wheels"
-                className="h-16 w-auto object-contain hover:scale-105 transition-transform duration-300"
+                src={asianBasketLogo}
+                alt="Asian Basket - Fresh Organic Authentic"
+                className="h-10 md:h-12 w-auto object-contain group-hover:scale-105 transition-transform"
               />
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
-            <a
-              href="/#home"
-              className="text-primary-foreground hover:text-accent font-semibold transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-accent after:transition-all after:duration-300 hover:after:w-full"
-            >
-              Home
-            </a>
-            <a
-              href="/#menu"
-              className="text-primary-foreground hover:text-accent font-semibold transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-accent after:transition-all after:duration-300 hover:after:w-full"
-            >
-              Menu
-            </a>
-            <a
-              href="/#food"
-              className="text-primary-foreground hover:text-accent font-semibold transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-accent after:transition-all after:duration-300 hover:after:w-full"
-            >
-              About
-            </a>
-            <a
-              href="/#contact"
-              className="text-primary-foreground hover:text-accent font-semibold transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-accent after:transition-all after:duration-300 hover:after:w-full"
-            >
-              Contact
-            </a>
+          {/* Search Bar - Hidden on small mobile, visible on desktop */}
+          <div className="hidden md:flex flex-1 justify-center">
+            <SearchBar />
+          </div>
 
-            {/* User Menu */}
+          {/* User Actions */}
+          <div className="flex items-center gap-1 md:gap-3">
+            {/* Wishlist - Hidden on mobile */}
+            <Button variant="ghost" size="icon" className="hidden md:inline-flex text-muted-foreground hover:text-primary hover:bg-secondary">
+              <Heart className="h-5 w-5" />
+            </Button>
+
+            {/* Account */}
             {isAuthenticated ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="flex items-center gap-2 text-primary-foreground hover:bg-primary/80 hover:text-accent"
-                  >
-                    <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center">
-                      <span className="text-accent-foreground font-bold text-sm">
-                        {user?.name?.charAt(0).toUpperCase()}
-                      </span>
+                  <Button variant="ghost" className="flex items-center gap-2 pl-2 pr-3 bg-secondary/50 hover:bg-secondary text-primary rounded-full">
+                    <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-sm">
+                      {user?.name?.[0].toUpperCase()}
                     </div>
-                    <span className="font-semibold">{user?.name?.split(' ')[0]}</span>
-                    <ChevronDown className="h-4 w-4" />
+                    <span className="hidden lg:inline-block max-w-[100px] truncate text-sm font-medium">
+                      {user?.name}
+                    </span>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuContent align="end" className="w-56">
+                  <div className="px-2 py-1.5 text-sm font-semibold text-muted-foreground">
+                    My Account
+                  </div>
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => navigate('/profile')}>
-                    <User className="mr-2 h-4 w-4" />
-                    Profile
+                    <User className="mr-2 h-4 w-4" /> Profile
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate('/orders')}>
-                    <ShoppingBag className="mr-2 h-4 w-4" />
-                    My Orders
+                    <Package className="mr-2 h-4 w-4" /> My Orders
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/profile')}>
+                    <MapPin className="mr-2 h-4 w-4" /> Addresses
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout} className="text-destructive">
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Logout
+                  <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive">
+                    <LogOut className="mr-2 h-4 w-4" /> Logout
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
               <Link to="/login">
-                <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-bold">
-                  Login
+                <Button variant="ghost" className="hidden md:inline-flex items-center gap-2 font-medium hover:text-primary">
+                  <User className="h-5 w-5" />
+                  <span>Login</span>
                 </Button>
               </Link>
             )}
 
-            <a
-              href="/#menu"
-              className="bg-accent text-accent-foreground px-6 py-2.5 rounded-full font-bold hover:bg-accent/90 transition-all duration-300 hover:scale-105 shadow-md"
+            {/* Cart Trigger */}
+            <Button
+              onClick={() => setIsCartOpen(true)}
+              className="relative bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-4 md:px-5 h-10 md:h-11 shadow-md hover:shadow-lg transition-all"
             >
-              Order Now
-            </a>
-          </nav>
-
-          {/* Mobile Hamburger Button */}
-          <button
-            onClick={toggleMenu}
-            className="md:hidden relative w-10 h-10 flex flex-col items-center justify-center focus:outline-none"
-            aria-label="Toggle menu"
-          >
-            <div className="w-6 flex flex-col items-center justify-center gap-1">
-              <span
-                className={`w-6 h-0.5 bg-accent transition-all duration-300 ease-in-out ${isOpen ? "rotate-45 translate-y-1.5" : ""
-                  }`}
-              />
-              <span
-                className={`w-4 h-0.5 bg-accent transition-all duration-300 ease-in-out ${isOpen ? "opacity-0" : "opacity-100"
-                  }`}
-              />
-              <span
-                className={`w-6 h-0.5 bg-accent transition-all duration-300 ease-in-out ${isOpen ? "-rotate-45 -translate-y-1.5" : ""
-                  }`}
-              />
-            </div>
-          </button>
+              <ShoppingBag className="h-5 w-5 md:mr-2" />
+              <span className="hidden md:inline font-bold">My Cart</span>
+              {cartItems.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-accent text-accent-foreground text-xs font-bold px-2 py-0.5 rounded-full border-2 border-background min-w-[20px]">
+                  {cartItems.length}
+                </span>
+              )}
+            </Button>
+          </div>
         </div>
 
-        {/* Mobile Navigation */}
-        <div
-          className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
-            }`}
-        >
-          <nav className="py-4 space-y-2">
-            <a
-              href="/#home"
-              className="block px-4 py-2.5 text-primary-foreground hover:bg-primary/80 hover:text-accent font-semibold rounded-lg transition-all duration-200"
-              onClick={toggleMenu}
-            >
-              Home
-            </a>
-            <a
-              href="/#menu"
-              className="block px-4 py-2.5 text-primary-foreground hover:bg-primary/80 hover:text-accent font-semibold rounded-lg transition-all duration-200"
-              onClick={toggleMenu}
-            >
-              Menu
-            </a>
-            <a
-              href="/#food"
-              className="block px-4 py-2.5 text-primary-foreground hover:bg-primary/80 hover:text-accent font-semibold rounded-lg transition-all duration-200"
-              onClick={toggleMenu}
-            >
-              About
-            </a>
-            <a
-              href="/#contact"
-              className="block px-4 py-2.5 text-primary-foreground hover:bg-primary/80 hover:text-accent font-semibold rounded-lg transition-all duration-200"
-              onClick={toggleMenu}
-            >
-              Contact
-            </a>
-
-            {/* Mobile User Section */}
-            {isAuthenticated ? (
-              <>
-                <div className="border-t border-primary-foreground/20 my-2" />
-                <div className="px-4 py-2 flex items-center gap-2 text-primary-foreground">
-                  <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center">
-                    <span className="text-accent-foreground font-bold text-sm">
-                      {user?.name?.charAt(0).toUpperCase()}
-                    </span>
-                  </div>
-                  <span className="font-semibold">{user?.name}</span>
-                </div>
-                <Link
-                  to="/profile"
-                  className="block px-4 py-2.5 text-primary-foreground hover:bg-primary/80 hover:text-accent font-semibold rounded-lg transition-all duration-200"
-                  onClick={toggleMenu}
-                >
-                  <User className="inline mr-2 h-4 w-4" />
-                  Profile
-                </Link>
-                <Link
-                  to="/orders"
-                  className="block px-4 py-2.5 text-primary-foreground hover:bg-primary/80 hover:text-accent font-semibold rounded-lg transition-all duration-200"
-                  onClick={toggleMenu}
-                >
-                  <ShoppingBag className="inline mr-2 h-4 w-4" />
-                  My Orders
-                </Link>
-                <button
-                  onClick={() => {
-                    handleLogout();
-                    toggleMenu();
-                  }}
-                  className="block w-full text-left px-4 py-2.5 text-red-300 hover:bg-primary/80 font-semibold rounded-lg transition-all duration-200"
-                >
-                  <LogOut className="inline mr-2 h-4 w-4" />
-                  Logout
-                </button>
-              </>
-            ) : (
-              <Link
-                to="/login"
-                className="block px-4 py-2.5 text-primary-foreground hover:bg-primary/80 hover:text-accent font-semibold rounded-lg transition-all duration-200"
-                onClick={toggleMenu}
-              >
-                <User className="inline mr-2 h-4 w-4" />
-                Login / Sign Up
-              </Link>
-            )}
-
-            <a
-              href="/#menu"
-              className="block mx-4 mt-4 px-6 py-2.5 bg-accent text-accent-foreground text-center rounded-full font-bold hover:bg-accent/90 transition-all duration-200"
-              onClick={toggleMenu}
-            >
-              Order Now
-            </a>
-          </nav>
+        {/* Search Bar - Mobile Only */}
+        <div className="mt-3 md:hidden">
+          <SearchBar />
         </div>
       </div>
+
+      {/* 3. Mega Menu (Desktop only) */}
+      <MegaMenu />
+
+      <Cart isOpen={isCartOpen} setIsOpen={setIsCartOpen} />
     </header>
   );
 };
 
 export default Header;
-

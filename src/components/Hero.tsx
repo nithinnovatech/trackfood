@@ -1,160 +1,120 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import hero1 from "@/assets/hero-1.jpg";
-import hero2 from "@/assets/hero-2.jpg";
-import hero3 from "@/assets/hero-3.jpg";
+import { Button } from "@/components/ui/button";
+
+const slides = [
+  {
+    id: 1,
+    title: "Fresh Indian & Asian Groceries",
+    subtitle: "Delivered directly to your door in Ireland",
+    description: "Shop the best quality spices, rice, fresh vegetables, and halal meat.",
+    image: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1200",
+    color: "bg-green-600",
+    link: "/#menu"
+  },
+  {
+    id: 2,
+    title: "Premium Basmati Rice",
+    subtitle: "Authentic Taste of India",
+    description: "Get the finest long-grain rice for your biryani and pulao.",
+    image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&q=80&w=1200",
+    color: "bg-orange-500",
+    link: "/cat/staples"
+  },
+  {
+    id: 3,
+    title: "Fresh Halal Meat",
+    subtitle: "Premium Quality Cuts",
+    description: "Fresh chicken, lamb, and beef sourced from trusted farms.",
+    image: "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&q=80&w=1200",
+    color: "bg-primary",
+    link: "/cat/meat"
+  }
+];
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
 
-  const slides = [
-    {
-      image: hero1,
-      title: "Authentic Street Tacos",
-      description: "Fresh ingredients, bold flavors, unforgettable taste",
-    },
-    {
-      image: "https://www.shutterstock.com/image-photo/cheesecake-german-made-quark-cheese-600nw-2637142877.jpg",
-      title: "Cheese Cakes",
-      description: "Juicy, loaded, and made to perfection",
-    },
-    {
-      image: hero3,
-      title: "Crispy Sides",
-      description: "The perfect companion to any meal",
-    },
-  ];
-
-  const nextSlide = () => {
-    if (!isTransitioning) {
-      setIsTransitioning(true);
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-      setTimeout(() => setIsTransitioning(false), 500);
-    }
-  };
-
-  const prevSlide = () => {
-    if (!isTransitioning) {
-      setIsTransitioning(true);
-      setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-      setTimeout(() => setIsTransitioning(false), 500);
-    }
-  };
-
-  const goToSlide = (index: number) => {
-    if (!isTransitioning && index !== currentSlide) {
-      setIsTransitioning(true);
-      setCurrentSlide(index);
-      setTimeout(() => setIsTransitioning(false), 500);
-    }
-  };
-
-  // Auto-advance slides
   useEffect(() => {
-    const interval = setInterval(() => {
-      nextSlide();
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
-    return () => clearInterval(interval);
-  }, [currentSlide]);
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
 
   return (
-    <section className="relative h-screen w-full overflow-hidden pt-20">
-      {/* Carousel Images */}
-      <div className="relative h-full w-full">
-        {slides.map((slide, index) => (
-          <div
-            key={index}
-            className={`absolute inset-0 transition-all duration-500 ease-in-out ${
-              index === currentSlide
-                ? "opacity-100 scale-100"
-                : "opacity-0 scale-105"
-            }`}
-          >
+    <section className="relative w-full h-[400px] md:h-[500px] overflow-hidden bg-muted">
+      {/* Slides */}
+      <div
+        className="flex transition-transform duration-700 ease-in-out h-full"
+        style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+      >
+        {slides.map((slide) => (
+          <div key={slide.id} className="min-w-full h-full relative">
+            <div className="absolute inset-0 bg-black/40 z-10" />
             <img
               src={slide.image}
               alt={slide.title}
               className="w-full h-full object-cover"
             />
-            {/* Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
+
+            <div className="absolute inset-0 z-20 flex flex-col justify-center items-center text-center text-white px-4">
+              <span className="inline-block px-3 py-1 bg-accent text-accent-foreground text-xs md:text-sm font-bold rounded-full mb-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                {slide.subtitle}
+              </span>
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-4 max-w-4xl leading-tight">
+                {slide.title}
+              </h1>
+              <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-2xl">
+                {slide.description}
+              </p>
+              <div className="flex gap-4">
+                <Link to={slide.link}>
+                  <Button size="lg" className="rounded-full text-base md:text-lg px-8 py-6 bg-primary hover:bg-primary/90 border-2 border-primary">
+                    Shop Now
+                  </Button>
+                </Link>
+                <Link to="/#about">
+                  <Button size="lg" variant="outline" className="rounded-full text-base md:text-lg px-8 py-6 bg-transparent text-white border-white hover:bg-white hover:text-black">
+                    Learn More
+                  </Button>
+                </Link>
+              </div>
+            </div>
           </div>
         ))}
       </div>
 
-      {/* Content */}
-      <div className="absolute inset-0 flex items-center">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl">
-            <h1 
-              className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-primary-foreground mb-4 transition-all duration-500 ${
-                isTransitioning ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"
-              }`}
-            >
-              {slides[currentSlide].title}
-            </h1>
-            <p 
-              className={`text-lg sm:text-xl md:text-2xl text-primary-foreground/90 mb-8 transition-all duration-500 delay-100 ${
-                isTransitioning ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"
-              }`}
-            >
-              {slides[currentSlide].description}
-            </p>
-            <div 
-              className={`flex flex-col sm:flex-row gap-4 transition-all duration-500 delay-200 ${
-                isTransitioning ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"
-              }`}
-            >
-             <a
-  href="#menu"
-  className="inline-block bg-accent text-accent-foreground px-6 py-3 rounded-full font-bold text-lg hover:bg-accent/90 transition-all duration-300 hover:scale-105 shadow-lg text-center"
->
-  View Menu
-</a>
-
-<a
-  href="#food"
-  className="inline-block bg-primary-foreground/10 backdrop-blur-sm border-2 border-primary-foreground text-primary-foreground px-6 py-3 rounded-full font-bold text-lg hover:bg-primary-foreground/20 transition-all duration-300 hover:scale-105 text-center"
->
-  About Us
-</a>
-
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Navigation Arrows */}
-      {/* <button
+      {/* Controls */}
+      <Button
+        variant="ghost"
+        size="icon"
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-30 text-white hover:bg-white/20 rounded-full h-12 w-12 hidden md:flex"
         onClick={prevSlide}
-        disabled={isTransitioning}
-        className="absolute left-4 top-1/2 -translate-y-1/2 bg-accent/80 hover:bg-accent text-accent-foreground p-3 rounded-full transition-all duration-300 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
-        aria-label="Previous slide"
       >
-        <ChevronLeft className="w-6 h-6" />
-      </button> */}
-      {/* <button
+        <ChevronLeft className="h-8 w-8" />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-30 text-white hover:bg-white/20 rounded-full h-12 w-12 hidden md:flex"
         onClick={nextSlide}
-        disabled={isTransitioning}
-        className="absolute right-4 top-1/2 -translate-y-1/2 bg-accent/80 hover:bg-accent text-accent-foreground p-3 rounded-full transition-all duration-300 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
-        aria-label="Next slide"
       >
-        <ChevronRight className="w-6 h-6" />
-      </button> */}
+        <ChevronRight className="h-8 w-8" />
+      </Button>
 
-      {/* Dots Indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3">
-        {slides.map((_, index) => (
+      {/* Indicators */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex gap-2">
+        {slides.map((_, idx) => (
           <button
-            key={index}
-            onClick={() => goToSlide(index)}
-            className={`transition-all duration-300 rounded-full ${
-              index === currentSlide
-                ? "w-10 h-3 bg-accent"
-                : "w-3 h-3 bg-primary-foreground/50 hover:bg-primary-foreground/80"
-            }`}
-            aria-label={`Go to slide ${index + 1}`}
+            key={idx}
+            onClick={() => setCurrentSlide(idx)}
+            className={`w-3 h-3 rounded-full transition-all ${idx === currentSlide ? "bg-primary w-8" : "bg-white/50 hover:bg-white"
+              }`}
           />
         ))}
       </div>

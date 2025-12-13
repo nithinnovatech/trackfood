@@ -16,6 +16,9 @@ import Orders from "./pages/Orders";
 import OrderDetails from "./pages/OrderDetails";
 import Checkout from "./pages/Checkout";
 import PaymentSuccess from "./pages/PaymentSuccess";
+import CategoryPage from "./pages/CategoryPage";
+import OffersPage from "./pages/OffersPage";
+import SearchPage from "./pages/SearchPage";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +35,9 @@ const App = () => (
                 <Route path="/" element={<Index />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/category/:id" element={<CategoryPage />} />
+                <Route path="/offers" element={<OffersPage />} />
+                <Route path="/search" element={<SearchPage />} />
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/payment-success" element={<PaymentSuccess />} />
                 <Route

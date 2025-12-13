@@ -20,24 +20,29 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "#6B9B5A", // Asian Basket Green
+          foreground: "#FFFFFF",
+          dark: "#4A7A3D",
+          light: "#8FB880",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "#E8E4D9", // Cream background
+          foreground: "#374151",
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          DEFAULT: "#EF4444",
+          foreground: "#FFFFFF",
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT: "#F5F5F5",
+          foreground: "#9CA3AF",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: "#7FB069", // Fresh green accent
+          foreground: "#FFFFFF",
+        },
+        cart: {
+          DEFAULT: "#5A5A5A", // Cart gray from logo
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",

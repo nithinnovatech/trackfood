@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Store, MapPin, ShoppingBag } from 'lucide-react';
-import logo from "@/assets/fow-logo.webp";
+import logo from "@/assets/asian-basket-logo-dark.jpg";
 
 const Food = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -31,31 +31,30 @@ const Food = () => {
   }, []);
 
   return (
-    <section 
-      id="food" 
+    <section
+      id="food"
       ref={sectionRef}
       className="py-16 md:py-24 px-4 md:px-8 bg-white relative overflow-hidden"
     >
       {/* Decorative Curved Lines */}
       <svg className="absolute top-0 left-0 w-full h-full opacity-10" viewBox="0 0 1440 800" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M-100 400C100 200 300 600 500 400C700 200 900 600 1100 400C1300 200 1500 600 1700 400" stroke="#DC2626" strokeWidth="2"/>
-        <path d="M-100 600C100 400 300 800 500 600C700 400 900 800 1100 600C1300 400 1500 800 1700 600" stroke="#DC2626" strokeWidth="2"/>
+        <path d="M-100 400C100 200 300 600 500 400C700 200 900 600 1100 400C1300 200 1500 600 1700 400" stroke="#6B9B5A" strokeWidth="2" />
+        <path d="M-100 600C100 400 300 800 500 600C700 400 900 800 1100 600C1300 400 1500 800 1700 600" stroke="#6B9B5A" strokeWidth="2" />
       </svg>
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Main Content */}
         <div className="text-center mb-16 md:mb-20 relative">
-          
+
           {/* Floating Food Images */}
-          <div 
-            className={`absolute left-0 md:left-10 lg:left-20 -top-10 md:top-10 w-32 md:w-48 lg:w-64 transition-all duration-1000 delay-200 ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'
-            }`}
+          <div
+            className={`absolute left-0 md:left-10 lg:left-20 -top-10 md:top-10 w-32 md:w-48 lg:w-64 transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'
+              }`}
           >
             {/* Burger Image Placeholder */}
             <div className="relative animate-float">
-              <img 
-                src="https://i.ibb.co/mF6N4K2T/wheels.webp" 
+              <img
+                src="https://i.ibb.co/mF6N4K2T/wheels.webp"
                 alt="Burger"
                 className="w-full h-auto drop-shadow-2xl"
               />
@@ -89,13 +88,12 @@ const Food = () => {
           </div> */}
 
           {/* Dumplings - Top Right */}
-          <div 
-            className={`absolute right-0 md:right-10 lg:right-20 -top-10 w-32 md:w-48 lg:w-64 transition-all duration-1000 delay-500 ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'
-            }`}
+          <div
+            className={`absolute right-0 md:right-10 lg:right-20 -top-10 w-32 md:w-48 lg:w-64 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'
+              }`}
           >
             <div className="relative animate-float-slow">
-              <img 
+              <img
                 src={logo}
                 alt="Dumplings"
                 className="w-full h-auto drop-shadow-2xl"
@@ -117,14 +115,13 @@ const Food = () => {
           </div> */}
 
           {/* Pizza - Bottom Right */}
-          <div 
-            className={`absolute right-4 md:right-20 lg:right-32 -bottom-10 md:bottom-20 w-32 md:w-48 lg:w-56 transition-all duration-1000 delay-700 ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-            }`}
+          <div
+            className={`absolute right-4 md:right-20 lg:right-32 -bottom-10 md:bottom-20 w-32 md:w-48 lg:w-56 transition-all duration-1000 delay-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+              }`}
           >
             <div className="relative animate-float">
-              <img 
-                src="https://i.ibb.co/r2sdWmRv/nuggets-removebg-preview.png" 
+              <img
+                src="https://i.ibb.co/r2sdWmRv/nuggets-removebg-preview.png"
                 alt="Pizza"
                 className="w-full h-auto drop-shadow-2xl"
               />
@@ -132,12 +129,11 @@ const Food = () => {
           </div>
 
           {/* Center Content */}
-          <div 
-            className={`relative z-10 py-12 md:py-20 transition-all duration-1000 ${
-              isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-            }`}
+          <div
+            className={`relative z-10 py-12 md:py-20 transition-all duration-1000 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+              }`}
           >
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-red-600 mb-6 leading-tight">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-primary mb-6 leading-tight">
               Flavors that roll<br />right to you
             </h1>
             <p className="text-base md:text-xl lg:text-2xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
@@ -147,13 +143,12 @@ const Food = () => {
         </div>
 
         {/* Stats Section */}
-        <div 
-          className={`bg-gray-50 rounded-3xl shadow-xl p-8 md:p-12 transition-all duration-1000 delay-800 ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-          }`}
+        <div
+          className={`bg-gray-50 rounded-3xl shadow-xl p-8 md:p-12 transition-all duration-1000 delay-800 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+            }`}
         >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-            
+
             {/* Restaurants Stat */}
             <div className="flex items-center justify-center gap-4 md:gap-6 group">
               <div>
@@ -161,7 +156,7 @@ const Food = () => {
                 <p className="text-base md:text-lg text-gray-600 mt-1">Happy Customers</p>
               </div>
               <div className="bg-white p-3 md:p-4 rounded-2xl shadow-md group-hover:scale-110 transition-transform duration-300">
-                <Store className="h-10 w-10 md:h-12 md:w-12 text-red-600" />
+                <Store className="h-10 w-10 md:h-12 md:w-12 text-primary" />
               </div>
             </div>
 
@@ -172,7 +167,7 @@ const Food = () => {
                 <p className="text-base md:text-lg text-gray-600 mt-1">cities</p>
               </div>
               <div className="bg-white p-3 md:p-4 rounded-2xl shadow-md group-hover:scale-110 transition-transform duration-300">
-                <MapPin className="h-10 w-10 md:h-12 md:w-12 text-red-600" />
+                <MapPin className="h-10 w-10 md:h-12 md:w-12 text-primary" />
               </div>
             </div>
 
@@ -183,7 +178,7 @@ const Food = () => {
                 <p className="text-base md:text-lg text-gray-600 mt-1">orders delivered</p>
               </div>
               <div className="bg-white p-3 md:p-4 rounded-2xl shadow-md group-hover:scale-110 transition-transform duration-300">
-                <ShoppingBag className="h-10 w-10 md:h-12 md:w-12 text-red-600" />
+                <ShoppingBag className="h-10 w-10 md:h-12 md:w-12 text-primary" />
               </div>
             </div>
 

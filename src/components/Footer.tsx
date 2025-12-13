@@ -1,155 +1,80 @@
-import { Facebook, Instagram, Twitter, Mail, Phone, MapPin, ChefHat, UtensilsCrossed } from 'lucide-react';
-import logo from "@/assets/fow-logo.webp";
+import { Facebook, Instagram, Twitter, MapPin, Phone, Mail, CreditCard } from "lucide-react";
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
-
   return (
-    <footer id="footer" className="bg-gradient-to-br from-red-700 via-red-600 to-red-800 text-white">
-      {/* Main Footer Content */}
-      <div className="max-w-7xl mx-auto px-4 py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
-          
-          {/* Logo & About Section */}
-           <div className="space-y-4">
-        <div className=" -mt-8 rounded-lg inline-block ">
-  <img 
-    src={logo}
-    alt="Logo"
-    className="w-32 h-32 object-contain"
-  />
-</div>
-
-            <p className="text-red-100 text-sm leading-relaxed">
-              Bringing authentic Korean flavors to your neighborhood. Follow us for daily locations and special events!
+    <footer className="bg-muted text-muted-foreground pt-16 pb-8 border-t border-border">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+          {/* Brand & Address */}
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-2xl font-bold text-primary">Asian <span className="text-foreground">Basket</span></span>
+            </div>
+            <p className="mb-4">
+              Authentic Indian & Asian groceries delivered to your door. Fresh produce, premium spices, and halal meat.
             </p>
-            
-            {/* Social Media */}
-            <div className="flex gap-3 pt-2">
-              <a 
-                href="https://www.instagram.com/flavoronwheelsaustin?igsh=ZnN6anRtMWx3YnFm&utm_source=qr" 
-                className="bg-red-800 hover:bg-yellow-400 hover:text-red-900 p-2.5 rounded-full transition-all duration-300 hover:scale-110 shadow-lg"
-                aria-label="Instagram"
-              >
-                <Instagram className="h-5 w-5" />
-              </a>
-              {/* <a 
-                href="#" 
-                className="bg-red-800 hover:bg-yellow-400 hover:text-red-900 p-2.5 rounded-full transition-all duration-300 hover:scale-110 shadow-lg"
-                aria-label="Facebook"
-              >
-                <Facebook className="h-5 w-5" />
-              </a> */}
-              {/* <a 
-                href="#" 
-                className="bg-red-800 hover:bg-yellow-400 hover:text-red-900 p-2.5 rounded-full transition-all duration-300 hover:scale-110 shadow-lg"
-                aria-label="Twitter"
-              >
-                <Twitter className="h-5 w-5" />
-              </a> */}
+            <div className="space-y-2 text-sm">
+              <div className="flex items-center gap-2">
+                <MapPin className="h-4 w-4 text-primary" />
+                <span>Unit 5, Food Park, Dublin 11</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Phone className="h-4 w-4 text-primary" />
+                <span>+353 123 456 789</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Mail className="h-4 w-4 text-primary" />
+                <span>support@vegspot.ie</span>
+              </div>
             </div>
           </div>
 
           {/* Quick Links */}
- <div>
-  <h3 className="text-yellow-400 font-bold text-lg mb-4 uppercase tracking-wide">
-    Quick Links
-  </h3>
-
-  <ul className="space-y-3">
-    {[
-      { name: 'Home', id: '/' },
-      { name: 'Menu', id: 'menu' },
-      { name: 'About Us', id: 'food' },
-      { name: 'Contact', id: 'contact' },
-    ].map((link) => (
-      <li key={link.name}>
-        <a
-          href={`#${link.id}`}
-          className="text-red-100 hover:text-yellow-400 transition-colors duration-300 inline-flex items-center group text-sm"
-        >
-          <span className="w-0 group-hover:w-2 h-0.5 bg-yellow-400 transition-all duration-300 mr-0 group-hover:mr-2"></span>
-          {link.name}
-        </a>
-      </li>
-    ))}
-  </ul>
-</div>
-
-
-
-          {/* Contact Info */}
           <div>
-            <h3 className="text-yellow-400 font-bold text-lg mb-4 uppercase tracking-wide">Contact Us</h3>
-            <ul className="space-y-4">
-              <li className="flex items-start gap-3 text-sm">
-                <Phone className="h-5 w-5 text-yellow-400 flex-shrink-0 mt-0.5" />
-                <div>
-                  <a href="tel:+14159611921" className="text-red-100 hover:text-yellow-400 transition-colors duration-300">
-                    415-961-1921
-                  </a>
-                </div>
-              </li>
-              <li className="flex items-start gap-3 text-sm">
-                <Mail className="h-5 w-5 text-yellow-400 flex-shrink-0 mt-0.5" />
-                <div>
-                  <a href="mailto:flavoronwheel@gmail.com" className="text-red-100 hover:text-yellow-400 transition-colors duration-300 break-all">
-                    flavoronwheel@gmail.com
-                  </a>
-                </div>
-              </li>
-              <li className="flex items-start gap-3 text-sm">
-                <MapPin className="h-5 w-5 text-yellow-400 flex-shrink-0 mt-0.5" />
-                <div>
-                  <span className="text-red-100">
-                    Leanden, TX
-                  </span>
-                </div>
-              </li>
+            <h3 className="text-foreground font-bold mb-4">Shop</h3>
+            <ul className="space-y-2">
+              <li><a href="#" className="hover:text-primary transition-colors">Pantry Essentials</a></li>
+              <li><a href="#" className="hover:text-primary transition-colors">Vegetables & Fruits</a></li>
+              <li><a href="#" className="hover:text-primary transition-colors">Meat & Poultry</a></li>
+              <li><a href="#" className="hover:text-primary transition-colors">Seafood</a></li>
+              <li><a href="#" className="hover:text-primary transition-colors">Spices & Herbs</a></li>
             </ul>
           </div>
 
-          {/* Specialties */}
+          {/* Customer Service */}
           <div>
-            <h3 className="text-yellow-400 font-bold text-lg mb-4 uppercase tracking-wide">Specialties</h3>
-            <ul className="space-y-3">
-              {['Korean Fried Chicken', 'KFC Rice Bowl', 'Bulgogi Taco', 'Bulgogi Fries'].map((item) => (
-                <li key={item}>
-                  <span 
-                    className="text-red-100 inline-flex items-center group text-sm hover:text-yellow-400 transition-colors duration-300"
-                  >
-                    <UtensilsCrossed className="h-4 w-4 text-yellow-400 mr-2" />
-                    {item}
-                  </span>
-                </li>
-              ))}
+            <h3 className="text-foreground font-bold mb-4">Customer Service</h3>
+            <ul className="space-y-2">
+              <li><a href="#" className="hover:text-primary transition-colors">About Us</a></li>
+              <li><a href="#" className="hover:text-primary transition-colors">Contact Us</a></li>
+              <li><a href="#" className="hover:text-primary transition-colors">Shipping Policy</a></li>
+              <li><a href="#" className="hover:text-primary transition-colors">Returns & Refunds</a></li>
+              <li><a href="#" className="hover:text-primary transition-colors">Privacy Policy</a></li>
             </ul>
           </div>
 
-        </div>
-      </div>
+          {/* Download App / Social */}
+          <div>
+            <h3 className="text-foreground font-bold mb-4">Stay Connected</h3>
+            <div className="flex gap-4 mb-6">
+              <a href="#" className="bg-white p-2 rounded-full shadow-sm hover:text-primary transition-colors"><Facebook className="h-5 w-5" /></a>
+              <a href="#" className="bg-white p-2 rounded-full shadow-sm hover:text-primary transition-colors"><Instagram className="h-5 w-5" /></a>
+              <a href="#" className="bg-white p-2 rounded-full shadow-sm hover:text-primary transition-colors"><Twitter className="h-5 w-5" /></a>
+            </div>
 
-      {/* Bottom Bar */}
-      <div className="border-t border-red-500/30">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
-            <p className="text-red-200">
-              © {currentYear} <span className="text-yellow-400 font-semibold">Flavor on Wheels</span>. All rights reserved.
-            </p>
-            <div className="flex gap-6">
-              <a href="#privacy" className="text-red-200 hover:text-yellow-400 transition-colors duration-300">
-                Privacy Policy
-              </a>
-              <a href="#terms" className="text-red-200 hover:text-yellow-400 transition-colors duration-300">
-                Terms of Service
-              </a>
+            <h3 className="text-foreground font-bold mb-4">We Accept</h3>
+            <div className="flex gap-2">
+              <div className="bg-white p-2 rounded shadow-sm"><CreditCard className="h-6 w-6 text-blue-600" /></div>
+              <div className="bg-white p-2 rounded shadow-sm"><CreditCard className="h-6 w-6 text-primary" /></div>
+              <div className="bg-white p-2 rounded shadow-sm"><CreditCard className="h-6 w-6 text-orange-500" /></div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Decorative Wave */}
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-400"></div>
+        <div className="pt-8 border-t border-border text-center text-sm">
+          <p>© {new Date().getFullYear()} Asian Basket. All rights reserved.</p>
+        </div>
+      </div>
     </footer>
   );
 };
