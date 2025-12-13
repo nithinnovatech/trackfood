@@ -1,12 +1,27 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Home, Search, ShoppingBag, User, Grid } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useCart } from '@/contexts/CartContext';
+import { useAuth } from '@/contexts/AuthContext';
 
-const BottomNav = () => {
+interface BottomNavProps {
+    setIsCartOpen: (isOpen: boolean) => void;
+}
+
+const BottomNav = ({ setIsCartOpen }: BottomNavProps) => {
     const location = useLocation();
+    const navigate = useNavigate();
     const { cartItems } = useCart();
+    const { isAuthenticated } = useAuth();
     const isActive = (path: string) => location.pathname === path;
+
+    const handleAccountClick = () => {
+        if (isAuthenticated) {
+            navigate('/profile');
+        } else {
+            navigate('/login');
+        }
+    };
 
     return (
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-border z-50 md:hidden pb-safe">
@@ -44,19 +59,19 @@ const BottomNav = () => {
                     <span>Search</span>
                 </Link>
 
-                <Link
-                    to="/profile"
+                <button
+                    onClick={handleAccountClick}
                     className={cn(
                         "flex flex-col items-center justify-center w-full h-full space-y-1 text-xs font-medium transition-colors",
-                        isActive('/profile') ? "text-primary" : "text-muted-foreground hover:text-primary"
+                        (isActive('/profile') || isActive('/login')) ? "text-primary" : "text-muted-foreground hover:text-primary"
                     )}
                 >
                     <User className="h-5 w-5" />
                     <span>Account</span>
-                </Link>
+                </button>
 
                 <button
-                    onClick={() => document.querySelector<HTMLElement>('[data-cart-trigger]')?.click()}
+                    onClick={() => setIsCartOpen(true)}
                     className="flex flex-col items-center justify-center w-full h-full space-y-1 text-xs font-medium text-muted-foreground hover:text-primary transition-colors relative"
                 >
                     <div className="relative">

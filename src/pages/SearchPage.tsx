@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import BottomNav from '@/components/BottomNav';
+import Cart from '@/components/Cart';
 import CategorySection from '@/components/CategorySection';
 
 // All available products for searching
@@ -40,6 +42,7 @@ const allProducts = [
 
 const SearchPage = () => {
     const [searchParams] = useSearchParams();
+    const [isCartOpen, setIsCartOpen] = useState(false);
     const query = searchParams.get('q') || '';
 
     // Filter products based on search query
@@ -74,7 +77,8 @@ const SearchPage = () => {
             </div>
 
             <Footer />
-            <BottomNav />
+            <BottomNav setIsCartOpen={setIsCartOpen} />
+            <Cart isOpen={isCartOpen} setIsOpen={setIsCartOpen} />
         </div>
     );
 };

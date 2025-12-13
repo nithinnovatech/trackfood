@@ -1,8 +1,12 @@
+import { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import BottomNav from '@/components/BottomNav';
+import Cart from '@/components/Cart';
 
 const OffersPage = () => {
+    const [isCartOpen, setIsCartOpen] = useState(false);
+
     return (
         <div className="min-h-screen bg-background pb-16 md:pb-0">
             <Header />
@@ -35,7 +39,8 @@ const OffersPage = () => {
             </div>
 
             <Footer />
-            <BottomNav />
+            <BottomNav setIsCartOpen={setIsCartOpen} />
+            <Cart isOpen={isCartOpen} setIsOpen={setIsCartOpen} />
         </div>
     );
 };

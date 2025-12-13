@@ -4,10 +4,14 @@ import { Button } from '@/components/ui/button';
 import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/hooks/use-toast';
 
-const Cart = () => {
+interface CartProps {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+}
+
+const Cart = ({ isOpen, setIsOpen }: CartProps) => {
   const { cartItems, removeFromCart, updateQuantity, getTotalItems, getTotalPrice, clearCart } = useCart();
   const { toast } = useToast();
-  const [isOpen, setIsOpen] = useState(false);
   const [showItems, setShowItems] = useState(false);
 
   const totalItems = getTotalItems();
@@ -67,26 +71,6 @@ const Cart = () => {
 
   return (
     <>
-      {/* Cart Button - Fixed - Only show when there are items */}
-      {totalItems > 0 && (
-        <div className="fixed bottom-5 right-4 z-50 flex flex-col items-end gap-2">
-          {/* Floating Action Button */}
-          <Button
-            onClick={() => setIsOpen(true)}
-            size="icon"
-            className="h-14 w-14 rounded-full shadow-2xl bg-secondary text-secondary-foreground hover:bg-secondary/90 hover:scale-110 transition-all duration-300 relative group"
-          >
-            <ShoppingCart className="h-7 w-7" />
-            <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs font-bold rounded-full h-7 w-7 flex items-center justify-center animate-bounce shadow-lg">
-              {totalItems}
-            </span>
-            <span className="absolute right-0 bottom-0 opacity-0 group-hover:opacity-100 bg-foreground text-background text-xs px-2 py-1 rounded-full whitespace-nowrap transition-opacity duration-300 pointer-events-none">
-              View Cart
-            </span>
-          </Button>
-        </div>
-      )}
-
       {/* Backdrop */}
       {isOpen && (
         <div

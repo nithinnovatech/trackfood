@@ -6,6 +6,7 @@ import CategoryTabs from "@/components/CategoryTabs";
 import TrendingSection from "@/components/TrendingSection";
 import CategorySection from "@/components/CategorySection";
 import BottomNav from "@/components/BottomNav";
+import Cart from "@/components/Cart";
 
 // Mock Data for Grocery Style Transformation
 const riceProducts = [
@@ -33,6 +34,7 @@ const meatProducts = [
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState('all');
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-background pb-16 md:pb-0">
@@ -109,7 +111,8 @@ const Index = () => {
       </main>
 
       <Footer />
-      <BottomNav />
+      <BottomNav setIsCartOpen={setIsCartOpen} />
+      <Cart isOpen={isCartOpen} setIsOpen={setIsCartOpen} />
     </div>
   );
 };

@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import BottomNav from '@/components/BottomNav';
+import Cart from '@/components/Cart';
 import CategorySection from '@/components/CategorySection';
 
 // Mock product data - you can expand this later
@@ -46,6 +48,7 @@ const categoryNames: Record<string, string> = {
 
 const CategoryPage = () => {
     const { id } = useParams<{ id: string }>();
+    const [isCartOpen, setIsCartOpen] = useState(false);
     const products = id ? allProducts[id as keyof typeof allProducts] || [] : [];
     const categoryName = id ? categoryNames[id] || 'Products' : 'Products';
 
@@ -69,7 +72,8 @@ const CategoryPage = () => {
             </div>
 
             <Footer />
-            <BottomNav />
+            <BottomNav setIsCartOpen={setIsCartOpen} />
+            <Cart isOpen={isCartOpen} setIsOpen={setIsCartOpen} />
         </div>
     );
 };
