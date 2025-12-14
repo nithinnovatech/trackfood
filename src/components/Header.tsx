@@ -31,8 +31,9 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-card shadow-sm border-b border-border">
       {/* 1. Announcement Bar */}
-      <div className="bg-primary text-primary-foreground py-1.5 px-4 text-xs font-medium text-center hidden sm:block">
-        <p>🚚 Free Next Day Delivery on orders over €50! | 📞 Call us: +353 123 456 789</p>
+      <div className="bg-primary text-primary-foreground py-1.5 px-4 text-xs font-medium text-center">
+        <p className="sm:hidden">🚚 Free Delivery in Dublin (€39.99+)</p>
+        <p className="hidden sm:block">🚚 Free Delivery available within Dublin for the orders on and above €39.99</p>
       </div>
 
       {/* 2. Main Header */}
@@ -66,7 +67,7 @@ const Header = () => {
               <img
                 src={asianBasketLogo}
                 alt="Asian Basket - Fresh Organic Authentic"
-                className="h-10 md:h-12 w-auto object-contain group-hover:scale-105 transition-transform"
+                className="h-14 md:h-16 w-auto object-contain group-hover:scale-105 transition-transform"
               />
             </Link>
           </div>
