@@ -1,10 +1,11 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
-import { Search, Plus, Minus, Utensils, X } from 'lucide-react';
+import { Search, Plus, Minus, Utensils, X, AlertTriangle } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/hooks/use-toast';
+import { isLowStock, isOutOfStock, getStockStatusMessage } from '@/lib/stockUtils';
 import riceBowlImg from '@/assets/menu/rice-bowl.jpg';
 import friedChickenImg from '@/assets/menu/fried-chicken.jpg';
 import koreanTacoImg from '@/assets/menu/korean-taco.jpg';
@@ -17,7 +18,7 @@ import beveragesImg from '@/assets/menu/beverages.jpg';
 
 const menuData = [
   { id: 'rb1', name: 'Bulgogi Rice Bowl', price: 16.99, category: 'Rice Bowls', image: "https://i.ibb.co/DfJ8hW3m/Bulgogi-Rice-Bowl.png" },
-  { id: 'rb2', name: 'KFC Rice Bowl', price: 14.50, category: 'Rice Bowls', image: "https://i.ibb.co/9HQg0rjJ/KFC-RICE-BOWL.png"},
+  { id: 'rb2', name: 'KFC Rice Bowl', price: 14.50, category: 'Rice Bowls', image: "https://i.ibb.co/9HQg0rjJ/KFC-RICE-BOWL.png" },
   { id: 'rb3', name: 'GFC Rice Bowl', price: 14.50, category: 'Rice Bowls', image: "https://i.ibb.co/HTg63N0q/GFC-RICE-BOWL.png" },
   { id: 'rb4', name: 'Plant Based Rice Bowl (Vegan)', price: 14.50, category: 'Rice Bowls', image: riceBowlImg },
   { id: 'kfc1', name: '10 pcs Korean Fried Chicken', price: 14.00, category: 'Korean Fried Chicken', image: "https://i.ibb.co/BV4TGsM9/KOREAN-FRIED-CHICKEN.png" },
@@ -28,7 +29,7 @@ const menuData = [
   { id: 'kt3', name: 'KFC Taco', price: 6.50, category: 'Korean Tacos', image: "https://i.ibb.co/My30DW31/Fusion-Korean-Street-Food-Mango-Habanero-Taco.jpg" },
   { id: 'kt4', name: '3 Homies', price: 16.00, category: 'Korean Tacos', image: koreanTacoImg },
   { id: 'app1', name: 'Bulgogi Fries', price: 13.00, category: 'Appetizers/Sides', image: "https://i.ibb.co/fdd196Wg/Fusion-Korean-Street-Food-Bulgogi-Fries.jpg" },
-  { id: 'app2', name: 'Fried Mandu', price: 7.00, category: 'Appetizers/Sides', image: "https://i.ibb.co/gLLJmwPh/Mandu.png"  },
+  { id: 'app2', name: 'Fried Mandu', price: 7.00, category: 'Appetizers/Sides', image: "https://i.ibb.co/gLLJmwPh/Mandu.png" },
   { id: 'app3', name: 'Mandu Gangjung', price: 9.00, category: 'Appetizers/Sides', image: bulgogiFriesImg },
   { id: 'kf1', name: 'Dino Nuggets (4)', price: 5.99, category: 'Kids Friendly', image: "https://www.shutterstock.com/image-photo/view-plate-dinosaur-chicken-nuggets-600nw-2377883865.jpg" },
   { id: 'kf2', name: 'Onion Rings', price: 5.99, category: 'Kids Friendly', image: "https://media.istockphoto.com/id/865789218/photo/onion-rings-with-ketchup.jpg?s=612x612&w=0&k=20&c=XxCAWLfOicCFWfZz0tRv1qoDMZM7UdQlfLaMJT6GoS8=" },
@@ -42,16 +43,16 @@ const menuData = [
   { id: 'bev3', name: 'Water', price: 1.00, category: 'Beverages', image: "https://img.freepik.com/free-photo/transparent-water-bottle-outdoors_23-2151049114.jpg" },
   { id: 'des4', name: 'Crème Brulée Cheesecake Slice', price: 6.10, category: 'Desserts', image: "https://i.ibb.co/5X0h0mnh/Sweet-Street-Desserts-Creme-Brulee-Cheesecake-Slice.jpg" },
   { id: 'des5', name: 'Yuzu Cheesecake', price: 6.98, category: 'Desserts', image: "https://i.ibb.co/994tCsDB/Sweet-Street-Desserts-Yuzu-Cheesecake.jpg" },
-  { id: 'des6', name: 'Vegan Banana Manifesto Cake', price: 3.99, category: 'Desserts', image: "https://i.ibb.co/R4gfsGw7/Veg-Banana-Cake.jpg"},
+  { id: 'des6', name: 'Vegan Banana Manifesto Cake', price: 3.99, category: 'Desserts', image: "https://i.ibb.co/R4gfsGw7/Veg-Banana-Cake.jpg" },
   { id: 'des7', name: 'Ube Cheesecake', price: 6.98, category: 'Desserts', image: "https://i.ibb.co/wF6WVTTt/Sweet-Street-Desserts-UBECheesecake.jpg" },
   { id: 'des8', name: 'Raspberry Cheesecake White Chocolate', price: 4.99, category: 'Desserts', image: "https://i.ibb.co/0Vm1pv7d/Rasberry.jpg" },
   { id: 'des9', name: 'Oreo Brownie', price: 3.50, category: 'Desserts', image: "https://i.ibb.co/8421pKD8/Oreo.jpg" },
   { id: 'des10', name: 'Luscious Lemon Squares', price: 3.50, category: 'Desserts', image: "https://i.ibb.co/Vc6ywLRz/Sweet-Street-Desserts-Lucious-Lemon-Squares.jpg" },
   { id: 'des11', name: 'Fabulous Chocolate Chunk Brownie', price: 3.50, category: 'Desserts', image: "https://i.ibb.co/FL2bZ6dQ/Peruvian.jpg" },
   { id: 'des12', name: '4High Carrot Cake Slice', price: 8.25, category: 'Desserts', image: "https://i.ibb.co/hk3ggXq/Sweet-Street-Desserts-Four-High-Carrot-Cake-Slice.jpg" },
-  { id: 'des13', name: 'Chocolate Torte Flourless Cake Slice', price: 3.99, category: 'Desserts', image: "https://i.ibb.co/cX6jLqGB/torte.jpg"},
+  { id: 'des13', name: 'Chocolate Torte Flourless Cake Slice', price: 3.99, category: 'Desserts', image: "https://i.ibb.co/cX6jLqGB/torte.jpg" },
   { id: 'des14', name: 'Chocolate Peruvian Brownie', price: 2.99, category: 'Desserts', image: "https://i.ibb.co/FL2bZ6dQ/Peruvian.jpg" },
- 
+
   { id: 'des16', name: 'Blueberry Cobbler White Chocolate Cheesecake', price: 6.49, category: 'Desserts', image: "https://i.ibb.co/HDTVkkhN/Sweet-Street-Desserts-Blueberry-Cobbler-White-Chocolate-Cheesecake-Slice.jpg" },
   { id: 'des17', name: 'Big Chocolate Cake Slice', price: 9.25, category: 'Desserts', image: "https://i.ibb.co/1JZKbKWS/Sweet-Street-Desserts-Big-Chocolate-Cake-Slice.jpg" },
   { id: 'des18', name: 'Basque Cheesecake', price: 5.98, category: 'Desserts', image: "https://i.ibb.co/20Js8Hsf/Sweet-Street-Desserts-Basque-Cheesecake.jpg" },
@@ -165,8 +166,8 @@ const Menu = () => {
                 onClick={() => setSelectedCategory(category)}
                 variant={selectedCategory === category ? 'default' : 'outline'}
                 className={`${selectedCategory === category
-                    ? 'bg-secondary text-secondary-foreground hover:bg-secondary/90'
-                    : 'hover:bg-secondary/10'
+                  ? 'bg-secondary text-secondary-foreground hover:bg-secondary/90'
+                  : 'hover:bg-secondary/10'
                   } transition-all duration-300 whitespace-nowrap`}
               >
                 {category}
@@ -193,6 +194,22 @@ const Menu = () => {
                     {item.category}
                   </span>
                 </div>
+                {/* Low Stock Badge */}
+                {isLowStock(item.id) && (
+                  <div className="absolute top-3 left-3">
+                    <span className="text-xs font-bold text-white bg-amber-500 px-2 py-1 rounded-full shadow-lg flex items-center gap-1 animate-pulse">
+                      <AlertTriangle className="h-3 w-3" />
+                      {getStockStatusMessage(item.id)}
+                    </span>
+                  </div>
+                )}
+                {isOutOfStock(item.id) && (
+                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                    <span className="text-lg font-bold text-white bg-red-600 px-4 py-2 rounded-lg">
+                      Out of Stock
+                    </span>
+                  </div>
+                )}
               </div>
 
               <CardContent className="pt-4">
@@ -200,12 +217,19 @@ const Menu = () => {
                   {item.name}
                 </h3>
                 <p className="text-2xl font-bold text-primary">
-                  ${item.price.toFixed(2)}
+                  €{item.price.toFixed(2)}
                 </p>
               </CardContent>
 
               <div className="px-4 pb-4 flex flex-col gap-3">
-                {getQuantity(item.id) === 0 ? (
+                {isOutOfStock(item.id) ? (
+                  <Button
+                    disabled
+                    className="w-full bg-gray-400 text-white font-semibold h-11 cursor-not-allowed"
+                  >
+                    Out of Stock
+                  </Button>
+                ) : getQuantity(item.id) === 0 ? (
                   <Button
                     onClick={() => incrementQuantity(item.id)}
                     className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90 font-semibold h-11"
@@ -244,12 +268,24 @@ const Menu = () => {
         {/* Mobile View List */}
         <div className="md:hidden space-y-3">
           {filteredItems.map((item) => (
-            <div key={item.id} className="bg-white border border-gray-200 rounded-lg p-4 flex gap-3">
-              <img
-                src={item.image}
-                alt={item.name}
-                className="w-24 h-24 rounded-lg object-cover flex-shrink-0"
-              />
+            <div key={item.id} className={`bg-white border border-gray-200 rounded-lg p-4 flex gap-3 relative ${isOutOfStock(item.id) ? 'opacity-60' : ''}`}>
+              <div className="relative">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="w-24 h-24 rounded-lg object-cover flex-shrink-0"
+                />
+                {isLowStock(item.id) && (
+                  <span className="absolute -top-1 -left-1 text-[10px] font-bold text-white bg-amber-500 px-1.5 py-0.5 rounded-full">
+                    {getStockStatusMessage(item.id)}
+                  </span>
+                )}
+                {isOutOfStock(item.id) && (
+                  <div className="absolute inset-0 bg-black/40 rounded-lg flex items-center justify-center">
+                    <span className="text-xs font-bold text-white bg-red-600 px-2 py-1 rounded">Sold Out</span>
+                  </div>
+                )}
+              </div>
               <div className="flex-1 flex flex-col">
                 <div className="mb-1">
                   <span className="text-xs font-semibold text-white bg-primary px-2 py-1 rounded-full">
@@ -260,10 +296,18 @@ const Menu = () => {
                   {item.name}
                 </h4>
                 <p className="text-primary font-bold text-base mb-2">
-                  ${item.price.toFixed(2)}
+                  €{item.price.toFixed(2)}
                 </p>
                 <div className="mt-auto">
-                  {getQuantity(item.id) === 0 ? (
+                  {isOutOfStock(item.id) ? (
+                    <Button
+                      disabled
+                      size="sm"
+                      className="w-full h-8 bg-gray-400 text-white text-xs font-semibold cursor-not-allowed"
+                    >
+                      Out of Stock
+                    </Button>
+                  ) : getQuantity(item.id) === 0 ? (
                     <Button
                       onClick={() => incrementQuantity(item.id)}
                       size="sm"
@@ -352,18 +396,16 @@ const Menu = () => {
                   key={category}
                   onClick={() => handleCategorySelect(category)}
                   variant={selectedCategory === category ? 'default' : 'outline'}
-                  className={`w-full h-12 text-base justify-start font-semibold transition-all ${
-                    selectedCategory === category
-                      ? 'bg-secondary text-secondary-foreground hover:bg-secondary/90'
-                      : 'hover:bg-gray-100'
-                  }`}
+                  className={`w-full h-12 text-base justify-start font-semibold transition-all ${selectedCategory === category
+                    ? 'bg-secondary text-secondary-foreground hover:bg-secondary/90'
+                    : 'hover:bg-gray-100'
+                    }`}
                 >
                   <span className="flex items-center gap-3">
-                    <span className={`w-3 h-3 rounded-full transition-all ${
-                      selectedCategory === category
-                        ? 'bg-secondary-foreground'
-                        : 'border-2 border-gray-400'
-                    }`} />
+                    <span className={`w-3 h-3 rounded-full transition-all ${selectedCategory === category
+                      ? 'bg-secondary-foreground'
+                      : 'border-2 border-gray-400'
+                      }`} />
                     {category}
                   </span>
                 </Button>

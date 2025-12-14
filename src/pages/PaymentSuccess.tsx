@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { CheckCircle, ShoppingBag, ArrowRight } from 'lucide-react';
+import { CheckCircle, ShoppingBag, ArrowRight, Ticket, Gift, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useOrders } from '@/contexts/OrderContext';
@@ -10,6 +10,8 @@ import Footer from '@/components/Footer';
 const PaymentSuccess = () => {
     const [searchParams] = useSearchParams();
     const orderId = searchParams.get('orderId');
+    const voucherCode = searchParams.get('voucher');
+    const voucherAmount = searchParams.get('voucherAmount');
     const { getOrderById } = useOrders();
     const [order, setOrder] = useState<ReturnType<typeof getOrderById>>(undefined);
 
@@ -18,6 +20,10 @@ const PaymentSuccess = () => {
             setOrder(getOrderById(orderId));
         }
     }, [orderId, getOrderById]);
+
+    // Calculate voucher expiry (30 days from now)
+    const voucherExpiry = new Date();
+    voucherExpiry.setDate(voucherExpiry.getDate() + 30);
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-green-50 via-background to-blue-50">
@@ -37,8 +43,53 @@ const PaymentSuccess = () => {
                         Payment Successful!
                     </h1>
                     <p className="text-lg text-muted-foreground mb-8">
-                        Thank you for your order. Your delicious food is being prepared!
+                        Thank you for your order. Your groceries are being prepared!
                     </p>
+
+                    {/* Voucher Earned Card */}
+                    {voucherCode && voucherAmount && (
+                        <Card className="shadow-xl mb-8 bg-gradient-to-r from-amber-50 to-orange-50 border-amber-200">
+                            <CardContent className="p-6">
+                                <div className="flex items-center justify-center gap-3 mb-4">
+                                    <div className="p-3 bg-amber-100 rounded-full">
+                                        <Gift className="h-6 w-6 text-amber-600" />
+                                    </div>
+                                    <h2 className="text-xl font-bold text-amber-800">
+                                        🎉 You've Earned a Voucher!
+                                    </h2>
+                                </div>
+
+                                <div className="bg-white rounded-xl p-4 shadow-inner border-2 border-dashed border-amber-300 mb-4">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <Ticket className="h-5 w-5 text-amber-600" />
+                                            <span className="font-mono text-lg font-bold text-amber-800">
+                                                {voucherCode}
+                                            </span>
+                                        </div>
+                                        <span className="text-2xl font-bold text-green-600">
+                                            €{parseFloat(voucherAmount).toFixed(2)} OFF
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center justify-center gap-2 text-sm text-amber-700">
+                                    <Calendar className="h-4 w-4" />
+                                    <span>
+                                        Valid until {voucherExpiry.toLocaleDateString('en-IE', {
+                                            day: 'numeric',
+                                            month: 'long',
+                                            year: 'numeric'
+                                        })}
+                                    </span>
+                                </div>
+
+                                <p className="text-xs text-amber-600 mt-3">
+                                    Use this code on your next order to get €{voucherAmount} off!
+                                </p>
+                            </CardContent>
+                        </Card>
+                    )}
 
                     {/* Order Details Card */}
                     {order && (
@@ -51,7 +102,7 @@ const PaymentSuccess = () => {
                                     </div>
                                     <div className="text-right">
                                         <p className="text-sm text-muted-foreground">Total Amount</p>
-                                        <p className="font-bold text-lg text-primary">${order.totalAmount.toFixed(2)}</p>
+                                        <p className="font-bold text-lg text-primary">€{order.totalAmount.toFixed(2)}</p>
                                     </div>
                                 </div>
 
@@ -74,11 +125,11 @@ const PaymentSuccess = () => {
                                                 <div className="flex-1">
                                                     <p className="font-medium text-sm">{item.name}</p>
                                                     <p className="text-xs text-muted-foreground">
-                                                        Qty: {item.quantity} × ${item.price.toFixed(2)}
+                                                        Qty: {item.quantity} × €{item.price.toFixed(2)}
                                                     </p>
                                                 </div>
                                                 <p className="font-semibold text-sm">
-                                                    ${(item.price * item.quantity).toFixed(2)}
+                                                    €{(item.price * item.quantity).toFixed(2)}
                                                 </p>
                                             </div>
                                         ))}
@@ -123,10 +174,10 @@ const PaymentSuccess = () => {
 
                     {/* Estimated Time */}
                     <div className="mt-12 p-6 bg-white rounded-2xl shadow-md">
-                        <p className="text-muted-foreground mb-2">Estimated Preparation Time</p>
-                        <p className="text-4xl font-bold text-primary">15-25 min</p>
+                        <p className="text-muted-foreground mb-2">Estimated Delivery Time</p>
+                        <p className="text-4xl font-bold text-primary">1-2 Days</p>
                         <p className="text-sm text-muted-foreground mt-2">
-                            We'll notify you when your order is ready!
+                            We'll notify you when your order is on its way!
                         </p>
                     </div>
                 </div>

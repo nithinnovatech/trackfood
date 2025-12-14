@@ -35,12 +35,12 @@ const Cart = ({ isOpen, setIsOpen }: CartProps) => {
     }
 
     const orderDetails = cartItems.map(
-      item => `${item.quantity}x ${item.name} - $${(item.price * item.quantity).toFixed(2)}`
+      item => `${item.quantity}x ${item.name} - €${(item.price * item.quantity).toFixed(2)}`
     ).join('\n');
 
     const total = getTotalPrice().toFixed(2);
-    const message = `New Order from Flavor on Wheels\n\n${orderDetails}\n\nTotal: $${total}`;
-    const whatsappUrl = `https://wa.me/14159611921?text=${encodeURIComponent(message)}`;
+    const message = `New Order from Asian Basket\n\n${orderDetails}\n\nTotal: €${total}`;
+    const whatsappUrl = `https://wa.me/353899899412?text=${encodeURIComponent(message)}`;
 
     window.open(whatsappUrl, '_blank');
 
@@ -167,10 +167,10 @@ const Cart = ({ isOpen, setIsOpen }: CartProps) => {
                       </div>
                       <div className="text-right flex-1">
                         <p className="text-sm text-muted-foreground">
-                          ${item.price.toFixed(2)} each
+                          €{item.price.toFixed(2)} each
                         </p>
                         <p className="text-lg font-bold text-primary">
-                          ${(item.price * item.quantity).toFixed(2)}
+                          €{(item.price * item.quantity).toFixed(2)}
                         </p>
                       </div>
                     </div>
@@ -188,7 +188,7 @@ const Cart = ({ isOpen, setIsOpen }: CartProps) => {
                 <div className="flex justify-between items-center py-3">
                   <span className="text-sm font-semibold text-muted-foreground">Subtotal</span>
                   <span className="text-lg font-bold text-foreground">
-                    ${getTotalPrice().toFixed(2)}
+                    €{getTotalPrice().toFixed(2)}
                   </span>
                 </div>
 

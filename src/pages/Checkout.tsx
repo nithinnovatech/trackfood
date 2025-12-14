@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, ShoppingBag, MapPin, CreditCard, Loader2 } from 'lucide-react';
-import { useForm } from 'react-hook-form';
+import { ArrowLeft, ShoppingBag, MapPin, CreditCard, Loader2, Tag, Ticket, AlertTriangle, Package } from 'lucide-react';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
@@ -12,18 +12,22 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useCart } from '@/contexts/CartContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useOrders } from '@/contexts/OrderContext';
+import { useVouchers } from '@/contexts/VoucherContext';
 import { useToast } from '@/hooks/use-toast';
 import { simulatePayment } from '@/lib/razorpay';
+import { calculateDeliveryFee, CartItemWithMeta, DeliveryBreakdown } from '@/lib/deliveryUtils';
+import { decreaseStock } from '@/lib/stockUtils';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import FrozenItemAlert from '@/components/FrozenItemAlert';
 
 const addressSchema = z.object({
     name: z.string().min(2, 'Name is required'),
     phone: z.string().min(10, 'Valid phone number is required'),
     street: z.string().min(5, 'Street address is required'),
     city: z.string().min(2, 'City is required'),
-    state: z.string().min(2, 'State is required'),
-    zipCode: z.string().min(5, 'ZIP code is required'),
+    state: z.string().min(2, 'County is required'),
+    zipCode: z.string().min(3, 'Eircode is required'),
     notes: z.string().optional(),
 });
 
@@ -34,26 +38,99 @@ const Checkout = () => {
     const { cartItems, getTotalPrice, clearCart } = useCart();
     const { user, isAuthenticated } = useAuth();
     const { createOrder } = useOrders();
+    const { applyVoucher, appliedVoucher, clearAppliedVoucher, markVoucherAsUsed, getValidVouchers, generateVoucher } = useVouchers();
     const { toast } = useToast();
     const [isProcessing, setIsProcessing] = useState(false);
     const [paymentProgress, setPaymentProgress] = useState('');
+    const [voucherCode, setVoucherCode] = useState('');
+    const [voucherError, setVoucherError] = useState('');
+    const [showFrozenAlert, setShowFrozenAlert] = useState(false);
+    const [frozenAlertShown, setFrozenAlertShown] = useState(false);
+    const [deliveryBreakdown, setDeliveryBreakdown] = useState<DeliveryBreakdown | null>(null);
 
     const {
         register,
         handleSubmit,
         formState: { errors },
+        control,
     } = useForm<AddressForm>({
         resolver: zodResolver(addressSchema),
         defaultValues: {
             name: user?.name || '',
             phone: user?.phone || '',
+            city: 'Dublin',
+            state: 'Dublin',
         },
     });
 
+    // Watch city and zipCode for delivery fee calculation
+    const watchedCity = useWatch({ control, name: 'city' });
+    const watchedZipCode = useWatch({ control, name: 'zipCode' });
+
     const totalPrice = getTotalPrice();
-    const deliveryFee = totalPrice > 50 ? 0 : 5.99;
-    const tax = totalPrice * 0.0825; // 8.25% tax
-    const grandTotal = totalPrice + deliveryFee + tax;
+    const validVouchers = getValidVouchers();
+
+    // Convert cart items to include category metadata
+    const cartItemsWithMeta: CartItemWithMeta[] = cartItems.map(item => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        category: item.category,
+    }));
+
+    // Calculate delivery fee whenever city or cart changes
+    useEffect(() => {
+        if (watchedCity) {
+            const breakdown = calculateDeliveryFee(
+                cartItemsWithMeta,
+                watchedCity,
+                watchedZipCode,
+                totalPrice
+            );
+            setDeliveryBreakdown(breakdown);
+
+            // Show frozen alert for outside Dublin orders with frozen items
+            if (breakdown.isOutsideDublin && breakdown.hasFrozenItems && !frozenAlertShown) {
+                setShowFrozenAlert(true);
+            }
+        }
+    }, [watchedCity, watchedZipCode, cartItems, totalPrice, frozenAlertShown]);
+
+    const deliveryFee = deliveryBreakdown?.total || 0;
+    const voucherDiscount = appliedVoucher?.amount || 0;
+    const grandTotal = Math.max(0, totalPrice + deliveryFee - voucherDiscount);
+
+    // Handle voucher application
+    const handleApplyVoucher = () => {
+        setVoucherError('');
+        if (!voucherCode.trim()) {
+            setVoucherError('Please enter a voucher code');
+            return;
+        }
+
+        const result = applyVoucher(voucherCode.trim().toUpperCase());
+        if (!result.success) {
+            setVoucherError(result.error || 'Invalid voucher');
+        } else {
+            toast({
+                title: 'Voucher applied!',
+                description: `€${result.discount.toFixed(2)} discount applied to your order.`,
+            });
+            setVoucherCode('');
+        }
+    };
+
+    // Handle frozen alert
+    const handleFrozenProceed = () => {
+        setShowFrozenAlert(false);
+        setFrozenAlertShown(true);
+    };
+
+    const handleFrozenModify = () => {
+        setShowFrozenAlert(false);
+        navigate('/');
+    };
 
     // Redirect if cart is empty
     if (cartItems.length === 0) {
@@ -134,6 +211,17 @@ const Checkout = () => {
                         data.notes
                     );
 
+                    // Mark voucher as used if applied
+                    if (appliedVoucher) {
+                        markVoucherAsUsed(appliedVoucher.code);
+                    }
+
+                    // Generate new voucher based on order total
+                    const newVoucher = generateVoucher(grandTotal, order.id);
+
+                    // Decrease stock for ordered items
+                    decreaseStock(cartItems.map(item => ({ id: item.id, quantity: item.quantity })));
+
                     // Clear cart
                     clearCart();
 
@@ -143,8 +231,9 @@ const Checkout = () => {
                         description: `Your order ${order.id} has been confirmed.`,
                     });
 
-                    // Navigate to success page
-                    navigate(`/payment-success?orderId=${order.id}`);
+                    // Navigate to success page with voucher info
+                    const voucherParam = newVoucher ? `&voucher=${newVoucher.code}&voucherAmount=${newVoucher.amount}` : '';
+                    navigate(`/payment-success?orderId=${order.id}${voucherParam}`);
                 },
                 (message) => setPaymentProgress(message)
             );
@@ -221,15 +310,15 @@ const Checkout = () => {
                                                 )}
                                             </div>
                                             <div className="space-y-2">
-                                                <Label htmlFor="state">State</Label>
+                                                <Label htmlFor="state">County</Label>
                                                 <Input id="state" {...register('state')} />
                                                 {errors.state && (
                                                     <p className="text-sm text-destructive">{errors.state.message}</p>
                                                 )}
                                             </div>
                                             <div className="space-y-2">
-                                                <Label htmlFor="zipCode">ZIP Code</Label>
-                                                <Input id="zipCode" {...register('zipCode')} />
+                                                <Label htmlFor="zipCode">Eircode</Label>
+                                                <Input id="zipCode" placeholder="D01 AB12" {...register('zipCode')} />
                                                 {errors.zipCode && (
                                                     <p className="text-sm text-destructive">{errors.zipCode.message}</p>
                                                 )}
@@ -244,6 +333,74 @@ const Checkout = () => {
                                                 {...register('notes')}
                                             />
                                         </div>
+                                    </CardContent>
+                                </Card>
+
+                                {/* Voucher Section */}
+                                <Card className="shadow-lg">
+                                    <CardHeader>
+                                        <CardTitle className="flex items-center gap-2">
+                                            <Ticket className="h-5 w-5" />
+                                            Apply Voucher
+                                        </CardTitle>
+                                    </CardHeader>
+                                    <CardContent className="space-y-4">
+                                        {appliedVoucher ? (
+                                            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                                                <div className="flex items-center justify-between">
+                                                    <div className="flex items-center gap-2">
+                                                        <Tag className="h-5 w-5 text-green-600" />
+                                                        <span className="font-medium text-green-800">
+                                                            Voucher applied: {appliedVoucher.code}
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="font-bold text-green-600">-€{appliedVoucher.amount.toFixed(2)}</span>
+                                                        <Button
+                                                            type="button"
+                                                            variant="ghost"
+                                                            size="sm"
+                                                            onClick={clearAppliedVoucher}
+                                                            className="text-red-500 hover:text-red-700"
+                                                        >
+                                                            Remove
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <>
+                                                <div className="flex gap-2">
+                                                    <Input
+                                                        placeholder="Enter voucher code"
+                                                        value={voucherCode}
+                                                        onChange={(e) => setVoucherCode(e.target.value.toUpperCase())}
+                                                        className="uppercase"
+                                                    />
+                                                    <Button type="button" onClick={handleApplyVoucher} variant="outline">
+                                                        Apply
+                                                    </Button>
+                                                </div>
+                                                {voucherError && (
+                                                    <p className="text-sm text-destructive">{voucherError}</p>
+                                                )}
+                                                {validVouchers.length > 0 && (
+                                                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                                                        <p className="text-sm text-amber-800 font-medium mb-2">
+                                                            You have {validVouchers.length} voucher(s) available:
+                                                        </p>
+                                                        <div className="space-y-1">
+                                                            {validVouchers.map(v => (
+                                                                <div key={v.code} className="flex items-center justify-between text-sm">
+                                                                    <span className="font-mono text-amber-700">{v.code}</span>
+                                                                    <span className="text-amber-600">€{v.amount} off</span>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </>
+                                        )}
                                     </CardContent>
                                 </Card>
 
@@ -269,12 +426,12 @@ const Checkout = () => {
                                                     <div className="flex-1">
                                                         <h4 className="font-semibold">{item.name}</h4>
                                                         <p className="text-sm text-muted-foreground">
-                                                            Qty: {item.quantity} × ${item.price.toFixed(2)}
+                                                            Qty: {item.quantity} × €{item.price.toFixed(2)}
                                                         </p>
                                                     </div>
                                                     <div className="text-right">
                                                         <p className="font-bold text-primary">
-                                                            ${(item.price * item.quantity).toFixed(2)}
+                                                            €{(item.price * item.quantity).toFixed(2)}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -297,30 +454,77 @@ const Checkout = () => {
                                         <div className="space-y-2">
                                             <div className="flex justify-between text-sm">
                                                 <span className="text-muted-foreground">Subtotal</span>
-                                                <span>${totalPrice.toFixed(2)}</span>
+                                                <span>€{totalPrice.toFixed(2)}</span>
                                             </div>
-                                            <div className="flex justify-between text-sm">
-                                                <span className="text-muted-foreground">Delivery Fee</span>
-                                                <span>{deliveryFee === 0 ? 'FREE' : `$${deliveryFee.toFixed(2)}`}</span>
-                                            </div>
-                                            <div className="flex justify-between text-sm">
-                                                <span className="text-muted-foreground">Tax (8.25%)</span>
-                                                <span>${tax.toFixed(2)}</span>
-                                            </div>
+
+                                            {/* Delivery Fee Breakdown */}
+                                            {deliveryBreakdown && (
+                                                <>
+                                                    <div className="flex justify-between text-sm">
+                                                        <span className="text-muted-foreground">Delivery Fee</span>
+                                                        <span>{deliveryFee === 0 ? 'FREE' : `€${deliveryFee.toFixed(2)}`}</span>
+                                                    </div>
+
+                                                    {/* Show delivery fee breakdown if there are charges */}
+                                                    {deliveryBreakdown.messages.length > 0 && (
+                                                        <div className="bg-muted/50 rounded-lg p-3 space-y-1">
+                                                            {deliveryBreakdown.messages.map((msg, idx) => (
+                                                                <p key={idx} className="text-xs text-muted-foreground flex items-start gap-1">
+                                                                    <Package className="h-3 w-3 mt-0.5 flex-shrink-0" />
+                                                                    {msg}
+                                                                </p>
+                                                            ))}
+                                                            {deliveryBreakdown.totalWeight > 0 && (
+                                                                <p className="text-xs text-muted-foreground mt-1">
+                                                                    📦 Total weight: {deliveryBreakdown.totalWeight.toFixed(1)}kg
+                                                                </p>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </>
+                                            )}
+
+                                            {/* Voucher Discount */}
+                                            {appliedVoucher && (
+                                                <div className="flex justify-between text-sm text-green-600">
+                                                    <span>Voucher Discount</span>
+                                                    <span>-€{voucherDiscount.toFixed(2)}</span>
+                                                </div>
+                                            )}
                                         </div>
 
                                         <div className="border-t pt-4">
                                             <div className="flex justify-between">
                                                 <span className="font-bold text-lg">Total</span>
                                                 <span className="font-bold text-lg text-primary">
-                                                    ${grandTotal.toFixed(2)}
+                                                    €{grandTotal.toFixed(2)}
                                                 </span>
                                             </div>
                                         </div>
 
-                                        {totalPrice < 50 && (
+                                        {/* Frozen Items Warning */}
+                                        {deliveryBreakdown?.hasFrozenItems && deliveryBreakdown?.isOutsideDublin && (
+                                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                                                <div className="flex items-start gap-2">
+                                                    <AlertTriangle className="h-4 w-4 text-blue-600 mt-0.5" />
+                                                    <p className="text-xs text-blue-700">
+                                                        Frozen items will be delivered the next day for outside Dublin orders.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Free Delivery Hint */}
+                                        {!deliveryBreakdown?.isOutsideDublin && totalPrice < 39.99 && (
                                             <p className="text-xs text-muted-foreground bg-muted p-3 rounded-lg">
-                                                💡 Add ${(50 - totalPrice).toFixed(2)} more for FREE delivery!
+                                                💡 Add €{(39.99 - totalPrice).toFixed(2)} more for FREE delivery!
+                                            </p>
+                                        )}
+
+                                        {/* Voucher Hint */}
+                                        {grandTotal >= 50 && !appliedVoucher && (
+                                            <p className="text-xs text-muted-foreground bg-green-50 p-3 rounded-lg border border-green-200">
+                                                🎉 You'll earn a €{grandTotal >= 100 ? '10' : '5'} voucher with this order!
                                             </p>
                                         )}
 
@@ -337,7 +541,7 @@ const Checkout = () => {
                                             ) : (
                                                 <>
                                                     <CreditCard className="mr-2 h-5 w-5" />
-                                                    Pay ${grandTotal.toFixed(2)}
+                                                    Pay €{grandTotal.toFixed(2)}
                                                 </>
                                             )}
                                         </Button>
@@ -354,6 +558,13 @@ const Checkout = () => {
             </main>
 
             <Footer />
+
+            {/* Frozen Item Alert Dialog */}
+            <FrozenItemAlert
+                isOpen={showFrozenAlert}
+                onProceed={handleFrozenProceed}
+                onModify={handleFrozenModify}
+            />
         </div>
     );
 };

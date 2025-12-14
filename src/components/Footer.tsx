@@ -16,15 +16,15 @@ const Footer = () => {
             <div className="space-y-2 text-sm">
               <div className="flex items-center gap-2">
                 <MapPin className="h-4 w-4 text-primary" />
-                <span>Unit 5, Food Park, Dublin 11</span>
+                <span>2 Mary Street, Dublin 1, Ireland, D01 PD88</span>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="h-4 w-4 text-primary" />
-                <span>+353 123 456 789</span>
+                <span>+353 899899412</span>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-primary" />
-                <span>support@vegspot.ie</span>
+                <span>support@asianbasket.ie</span>
               </div>
             </div>
           </div>
@@ -58,7 +58,7 @@ const Footer = () => {
             <h3 className="text-foreground font-bold mb-4">Stay Connected</h3>
             <div className="flex gap-4 mb-6">
               <a href="#" className="bg-white p-2 rounded-full shadow-sm hover:text-primary transition-colors"><Facebook className="h-5 w-5" /></a>
-              <a href="#" className="bg-white p-2 rounded-full shadow-sm hover:text-primary transition-colors"><Instagram className="h-5 w-5" /></a>
+              <a href="https://www.instagram.com/asianbasket_ie/" target="_blank" rel="noopener noreferrer" className="bg-white p-2 rounded-full shadow-sm hover:text-primary transition-colors"><Instagram className="h-5 w-5" /></a>
               <a href="#" className="bg-white p-2 rounded-full shadow-sm hover:text-primary transition-colors"><Twitter className="h-5 w-5" /></a>
             </div>
 

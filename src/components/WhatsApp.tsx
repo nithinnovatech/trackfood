@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
-const WhatsApp = ({ 
-  phoneNumber = "+14159611921 ", 
-  message = "Hello! I'm interested in your services." 
+const WhatsApp = ({
+  phoneNumber = "+353899899412",
+  message = "Hello! I'm interested in your services."
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -22,9 +22,8 @@ const WhatsApp = ({
       >
         {/* Floating Button */}
         <div
-          className={`relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-green-500 rounded-full shadow-lg transition-all duration-300 ${
-            isHovered ? 'scale-110 shadow-2xl' : 'scale-100'
-          }`}
+          className={`relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-green-500 rounded-full shadow-lg transition-all duration-300 ${isHovered ? 'scale-110 shadow-2xl' : 'scale-100'
+            }`}
         >
           {/* WhatsApp Icon */}
           <svg

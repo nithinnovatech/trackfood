@@ -92,7 +92,7 @@ const Index = () => {
         {/* 6. Newsletter / Club */}
         <section className="py-16 bg-primary text-primary-foreground">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-4">Join VegSpot Community Club</h2>
+            <h2 className="text-3xl font-bold mb-4">Join Asian Basket  Community Club</h2>
             <p className="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
               Receive latest updates about discount offers, new products, and exclusive recipes directly to your inbox.
             </p>
