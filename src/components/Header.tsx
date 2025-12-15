@@ -55,9 +55,12 @@ const Header = () => {
                   <hr />
                   <div className="space-y-2">
                     <p className="text-sm font-semibold text-muted-foreground uppercase">Categories</p>
-                    <Link to="/cat/fruits" className="block py-2">Fruits & Veg</Link>
-                    <Link to="/cat/meat" className="block py-2">Meat & Poultry</Link>
-                    <Link to="/cat/seafood" className="block py-2">Seafood</Link>
+                    <Link to="/category/fruits-veg" className="block py-2">Fruits & Vegetables</Link>
+                    <Link to="/category/meat" className="block py-2">Meat & Poultry</Link>
+                    <Link to="/category/seafood" className="block py-2">Seafood</Link>
+                    <Link to="/category/staples" className="block py-2">Rice & Flour</Link>
+                    <Link to="/category/dairy" className="block py-2">Dairy & Bakery</Link>
+                    <Link to="/category/snacks" className="block py-2">Snacks & Drinks</Link>
                   </div>
                 </nav>
               </SheetContent>
@@ -67,7 +70,7 @@ const Header = () => {
               <img
                 src={asianBasketLogo}
                 alt="Asian Basket - Fresh Organic Authentic"
-                className="h-14 md:h-16 w-auto object-contain group-hover:scale-105 transition-transform"
+                className="h-16 md:h-20 w-auto object-contain group-hover:scale-105 transition-transform"
               />
             </Link>
           </div>

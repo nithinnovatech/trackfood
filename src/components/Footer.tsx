@@ -1,4 +1,5 @@
 import { Facebook, Instagram, Twitter, MapPin, Phone, Mail, CreditCard } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -33,11 +34,11 @@ const Footer = () => {
           <div>
             <h3 className="text-foreground font-bold mb-4">Shop</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="hover:text-primary transition-colors">Pantry Essentials</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Vegetables & Fruits</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Meat & Poultry</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Seafood</a></li>
-              <li><a href="#" className="hover:text-primary transition-colors">Spices & Herbs</a></li>
+              <li><Link to="/category/staples" className="hover:text-primary transition-colors">Pantry Essentials</Link></li>
+              <li><Link to="/category/fruits-veg" className="hover:text-primary transition-colors">Vegetables & Fruits</Link></li>
+              <li><Link to="/category/meat" className="hover:text-primary transition-colors">Meat & Poultry</Link></li>
+              <li><Link to="/category/seafood" className="hover:text-primary transition-colors">Seafood</Link></li>
+              <li><Link to="/search?q=Spices" className="hover:text-primary transition-colors">Spices & Herbs</Link></li>
             </ul>
           </div>
 

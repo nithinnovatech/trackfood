@@ -38,17 +38,6 @@ const BottomNav = ({ setIsCartOpen }: BottomNavProps) => {
                 </Link>
 
                 <Link
-                    to="/categories"
-                    className={cn(
-                        "flex flex-col items-center justify-center w-full h-full space-y-1 text-xs font-medium transition-colors",
-                        isActive('/categories') ? "text-primary" : "text-muted-foreground hover:text-primary"
-                    )}
-                >
-                    <Grid className="h-5 w-5" />
-                    <span>Catalog</span>
-                </Link>
-
-                <Link
                     to="/search"
                     className={cn(
                         "flex flex-col items-center justify-center w-full h-full space-y-1 text-xs font-medium transition-colors",
@@ -58,6 +47,20 @@ const BottomNav = ({ setIsCartOpen }: BottomNavProps) => {
                     <Search className="h-5 w-5" />
                     <span>Search</span>
                 </Link>
+
+                <button
+                    onClick={() => {
+                        navigate('/');
+                        setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
+                    }}
+                    className={cn(
+                        "flex flex-col items-center justify-center w-full h-full space-y-1 text-xs font-medium transition-colors",
+                        "text-muted-foreground hover:text-primary"
+                    )}
+                >
+                    <Grid className="h-5 w-5" />
+                    <span>Categories</span>
+                </button>
 
                 <button
                     onClick={handleAccountClick}
