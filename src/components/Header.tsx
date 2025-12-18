@@ -19,6 +19,7 @@ import asianBasketLogo from '@/assets/asian-basket-logo-light.jpg';
 
 const Header = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { cartItems } = useCart();
   const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
@@ -31,9 +32,11 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-card shadow-sm border-b border-border">
       {/* 1. Announcement Bar */}
-      <div className="bg-primary text-primary-foreground py-1.5 px-4 text-xs font-medium text-center">
-        <p className="sm:hidden">🚚 Free Delivery in Dublin (€39.99+)</p>
-        <p className="hidden sm:block">🚚 Free Delivery available within Dublin for the orders on and above €39.99</p>
+      <div className="bg-primary text-primary-foreground py-1.5 px-4 text-xs font-medium overflow-hidden marquee-container">
+        <div className="animate-marquee">
+          <span className="sm:hidden">🚚 Free Delivery in Dublin (€39.99+) • Fresh Indian & Asian Groceries • Order Now!</span>
+          <span className="hidden sm:inline">🚚 Free Delivery available within Dublin for the orders on and above €39.99 • Fresh Indian & Asian Groceries Delivered to Your Door • Order Now!</span>
+        </div>
       </div>
 
       {/* 2. Main Header */}
@@ -42,7 +45,7 @@ const Header = () => {
 
           {/* Logo & Mobile Menu */}
           <div className="flex items-center gap-3">
-            <Sheet>
+            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="md:hidden">
                   <Menu className="h-6 w-6" />
@@ -50,8 +53,11 @@ const Header = () => {
               </SheetTrigger>
               <SheetContent side="left" className="w-[300px] sm:w-[400px]">
                 <nav className="flex flex-col gap-4 mt-8">
-                  <Link to="/" className="text-lg font-bold text-primary">Home</Link>
-                  <Link to="/orders" className="text-lg font-medium">My Orders</Link>
+                  <Link to="/" className="text-lg font-bold text-primary" onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
+                  <Link to="/orders" className="text-lg font-medium" onClick={() => setIsMobileMenuOpen(false)}>My Orders</Link>
+                  <Link to="/offers" className="text-lg font-medium" onClick={() => setIsMobileMenuOpen(false)}>Special Offers</Link>
+                  <Link to="/search?q=Festival" className="text-lg font-medium" onClick={() => setIsMobileMenuOpen(false)}>Festival Season</Link>
+                  <Link to="/search?q=Indian Fruits" className="text-lg font-medium" onClick={() => setIsMobileMenuOpen(false)}>Indian Fruits</Link>
                   <hr />
                   <div className="space-y-2">
                     <p className="text-sm font-semibold text-muted-foreground uppercase">Categories</p>
@@ -70,7 +76,7 @@ const Header = () => {
               <img
                 src={asianBasketLogo}
                 alt="Asian Basket - Fresh Organic Authentic"
-                className="h-16 md:h-20 w-auto object-contain group-hover:scale-105 transition-transform"
+                className="h-20 md:h-24 w-auto object-contain group-hover:scale-105 transition-transform"
               />
             </Link>
           </div>

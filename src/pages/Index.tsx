@@ -18,11 +18,71 @@ const riceProducts = [
 ];
 
 const vegProducts = [
-  { id: "v1", name: "Fresh Okra (Bhindi) - 500g", price: 4.99, category: "Vegetables", image: "https://images.pexels.com/photos/6157049/pexels-photo-6157049.jpeg?auto=compress&cs=tinysrgb&w=400" },
-  { id: "v2", name: "Fresh Curry Leaves - Bunch", price: 1.50, category: "Vegetables", image: "https://images.pexels.com/photos/4198018/pexels-photo-4198018.jpeg?auto=compress&cs=tinysrgb&w=400" },
-  { id: "v3", name: "Green Chilli - 200g", price: 2.20, category: "Vegetables", image: "https://images.pexels.com/photos/7456396/pexels-photo-7456396.jpeg?auto=compress&cs=tinysrgb&w=400" },
-  { id: "v4", name: "Red Onion - 1kg", price: 1.80, category: "Vegetables", image: "https://images.pexels.com/photos/1435904/pexels-photo-1435904.jpeg?auto=compress&cs=tinysrgb&w=400" },
-  { id: "v5", name: "Coriander Bunch", price: 1.20, category: "Vegetables", image: "https://images.pexels.com/photos/4198018/pexels-photo-4198018.jpeg?auto=compress&cs=tinysrgb&w=400" },
+  {
+    id: "v1",
+    name: "Fresh Okra (Bhindi)",
+    price: 4.99,
+    pricePerKg: 9.98,
+    category: "Vegetables",
+    image: "https://images.pexels.com/photos/6157049/pexels-photo-6157049.jpeg?auto=compress&cs=tinysrgb&w=400",
+    availableWeights: [
+      { weight: "0.25", label: "250g" },
+      { weight: "0.5", label: "500g" },
+      { weight: "1", label: "1kg" }
+    ]
+  },
+  {
+    id: "v2",
+    name: "Fresh Curry Leaves",
+    price: 1.50,
+    pricePerKg: 12.00,
+    category: "Vegetables",
+    image: "https://images.pexels.com/photos/4198018/pexels-photo-4198018.jpeg?auto=compress&cs=tinysrgb&w=400",
+    availableWeights: [
+      { weight: "0.25", label: "250g" },
+      { weight: "0.5", label: "500g" },
+      { weight: "1", label: "1kg" }
+    ]
+  },
+  {
+    id: "v3",
+    name: "Green Chilli",
+    price: 2.20,
+    pricePerKg: 11.00,
+    category: "Vegetables",
+    image: "https://images.pexels.com/photos/7456396/pexels-photo-7456396.jpeg?auto=compress&cs=tinysrgb&w=400",
+    availableWeights: [
+      { weight: "0.25", label: "250g" },
+      { weight: "0.5", label: "500g" },
+      { weight: "1", label: "1kg" }
+    ]
+  },
+  {
+    id: "v4",
+    name: "Red Onion",
+    price: 1.80,
+    pricePerKg: 1.80,
+    category: "Vegetables",
+    image: "https://images.pexels.com/photos/1435904/pexels-photo-1435904.jpeg?auto=compress&cs=tinysrgb&w=400",
+    availableWeights: [
+      { weight: "0.5", label: "500g" },
+      { weight: "1", label: "1kg" },
+      { weight: "2", label: "2kg" }
+    ]
+  },
+  {
+    id: "v5",
+    name: "Coriander Bunch",
+    price: 1.20,
+    pricePerKg: 9.60,
+    category: "Vegetables",
+    image: "https://images.pexels.com/photos/4198018/pexels-photo-4198018.jpeg?auto=compress&cs=tinysrgb&w=400",
+    availableWeights: [
+      { weight: "0.25", label: "250g" },
+      { weight: "0.5", label: "500g" },
+      { weight: "1", label: "1kg" }
+    ]
+  },
 ];
 
 const meatProducts = [
@@ -54,15 +114,15 @@ const Index = () => {
       <main>
         {/* 4. Category Sections */}
         {(activeTab === 'all' || activeTab === 'pantry') && (
-          <CategorySection title="Rice & Staples" products={riceProducts} />
+          <CategorySection title="Rice & Staples" products={riceProducts} categorySlug="staples" />
         )}
 
         {(activeTab === 'all' || activeTab === 'vegetables') && (
-          <CategorySection title="Fresh Vegetables" products={vegProducts} bgColor="bg-secondary/20" />
+          <CategorySection title="Fresh Vegetables" products={vegProducts} bgColor="bg-secondary/20" categorySlug="fruits-veg" />
         )}
 
         {(activeTab === 'all' || activeTab === 'meat') && (
-          <CategorySection title="Meat & Poultry" products={meatProducts} />
+          <CategorySection title="Meat & Poultry" products={meatProducts} categorySlug="meat" />
         )}
 
         {/* 5. Additional Promo Section */}
@@ -78,7 +138,7 @@ const Index = () => {
                 </div>
               </div>
               <div className="relative rounded-2xl overflow-hidden h-[250px] md:h-[300px] group cursor-pointer">
-                <img src="https://images.unsplash.com/photo-1615486511484-92e590508937?auto=format&fit=crop&q=80&w=800" alt="Frozen Foods" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                <img src="https://images.unsplash.com/photo-1564834744159-ff0ea41ba4b9?auto=format&fit=crop&q=80&w=800" alt="Frozen Foods" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 <div className="absolute inset-0 bg-black/40 flex flex-col justify-center px-8 z-10">
                   <h3 className="text-3xl font-bold text-white mb-2">Frozen Essentials</h3>
                   <p className="text-white/90 mb-4">Stock up your freezer with our premium range.</p>
@@ -96,13 +156,13 @@ const Index = () => {
             <p className="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
               Receive latest updates about discount offers, new products, and exclusive recipes directly to your inbox.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
               <input
                 type="email"
                 placeholder="Enter your email address"
-                className="flex-1 h-12 px-4 rounded-full text-foreground border-none focus:ring-2 focus:ring-white"
+                className="flex-1 h-14 px-5 rounded-full text-foreground border-none focus:ring-2 focus:ring-white shadow-sm text-base"
               />
-              <button className="h-12 px-8 bg-secondary text-secondary-foreground font-bold rounded-full hover:bg-secondary/90 transition-colors">
+              <button className="h-14 px-8 bg-secondary text-secondary-foreground font-bold rounded-full hover:bg-secondary/90 transition-colors shadow-md">
                 Subscribe
               </button>
             </div>

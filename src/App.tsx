@@ -20,6 +20,11 @@ import PaymentSuccess from "./pages/PaymentSuccess";
 import CategoryPage from "./pages/CategoryPage";
 import OffersPage from "./pages/OffersPage";
 import SearchPage from "./pages/SearchPage";
+import RefundPolicy from "./pages/RefundPolicy";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import AboutUs from "./pages/AboutUs";
+import ContactUs from "./pages/ContactUs";
+import ShippingPolicy from "./pages/ShippingPolicy";
 
 const queryClient = new QueryClient();
 
@@ -66,6 +71,11 @@ const App = () => (
                       </ProtectedRoute>
                     }
                   />
+                  <Route path="/refund-policy" element={<RefundPolicy />} />
+                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                  <Route path="/about" element={<AboutUs />} />
+                  <Route path="/contact" element={<ContactUs />} />
+                  <Route path="/shipping-policy" element={<ShippingPolicy />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>

@@ -1,9 +1,15 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Plus, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/hooks/use-toast';
 import { Link } from 'react-router-dom';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+interface WeightOption {
+    weight: string;
+    label: string;
+}
 
 interface Product {
     id: string;
@@ -11,24 +17,46 @@ interface Product {
     price: number;
     image: string;
     category: string;
+    pricePerKg?: number;
+    availableWeights?: WeightOption[];
 }
 
 interface CategorySectionProps {
     title: string;
     products: Product[];
     bgColor?: string;
+    categorySlug: string;
 }
 
-const CategorySection = ({ title, products, bgColor = 'bg-white' }: CategorySectionProps) => {
+const CategorySection = ({ title, products, bgColor = 'bg-white', categorySlug }: CategorySectionProps) => {
     const scrollRef = useRef<HTMLDivElement>(null);
     const { addToCart } = useCart();
     const { toast } = useToast();
+    const [selectedWeights, setSelectedWeights] = useState<Record<string, string>>({});
+
+    const handleWeightChange = (productId: string, weight: string) => {
+        setSelectedWeights(prev => ({ ...prev, [productId]: weight }));
+    };
+
+    const calculatePrice = (product: Product) => {
+        if (!product.pricePerKg || !product.availableWeights) return product.price;
+        const selectedWeight = selectedWeights[product.id] || product.availableWeights[0]?.weight || '1';
+        return product.pricePerKg * parseFloat(selectedWeight);
+    };
 
     const handleAddToCart = (item: Product) => {
-        addToCart(item);
+        const selectedWeight = selectedWeights[item.id];
+        const finalPrice = calculatePrice(item);
+        const weightLabel = item.availableWeights?.find(w => w.weight === selectedWeight)?.label || '';
+
+        addToCart({
+            ...item,
+            price: finalPrice,
+            name: weightLabel ? `${item.name} - ${weightLabel}` : item.name
+        });
         toast({
             title: "Added to cart",
-            description: `${item.name} has been added to your cart.`,
+            description: `${item.name}${weightLabel ? ` (${weightLabel})` : ''} has been added to your cart.`,
         });
     };
 
@@ -52,7 +80,7 @@ const CategorySection = ({ title, products, bgColor = 'bg-white' }: CategorySect
                         {title}
                     </h2>
                     <div className="flex items-center gap-2">
-                        <Link to={`/category/${title.toLowerCase()}`} className="text-sm font-semibold text-primary hover:underline mr-2 hidden sm:block">
+                        <Link to={`/category/${categorySlug}`} className="text-sm font-semibold text-primary hover:underline mr-2 hidden sm:block">
                             View All
                         </Link>
                         <Button
@@ -110,19 +138,51 @@ const CategorySection = ({ title, products, bgColor = 'bg-white' }: CategorySect
                             </div>
 
                             {/* Product Info */}
-                            <div className="space-y-1">
+                            <div className="space-y-2">
                                 <h3 className="font-semibold text-sm line-clamp-2 min-h-[40px]" title={product.name}>
                                     {product.name}
                                 </h3>
 
+                                {/* Weight Selector for products with variants */}
+                                {product.availableWeights && product.availableWeights.length > 0 && (
+                                    <Select
+                                        value={selectedWeights[product.id] || product.availableWeights[0].weight}
+                                        onValueChange={(value) => handleWeightChange(product.id, value)}
+                                    >
+                                        <SelectTrigger className="h-8 text-xs">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {product.availableWeights.map((option) => (
+                                                <SelectItem key={option.weight} value={option.weight} className="text-xs">
+                                                    {option.label}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                )}
+
                                 <div className="flex items-center justify-between mt-2">
                                     <div>
-                                        <span className="text-xs text-muted-foreground line-through mr-1">
-                                            ${(product.price * 1.2).toFixed(2)}
-                                        </span>
-                                        <div className="font-bold text-lg text-primary">
-                                            ${product.price.toFixed(2)}
-                                        </div>
+                                        {product.pricePerKg ? (
+                                            <>
+                                                <div className="text-xs text-muted-foreground mb-0.5">
+                                                    €{product.pricePerKg.toFixed(2)}/kg
+                                                </div>
+                                                <div className="font-bold text-lg text-primary">
+                                                    €{calculatePrice(product).toFixed(2)}
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <span className="text-xs text-muted-foreground line-through mr-1">
+                                                    €{(product.price * 1.2).toFixed(2)}
+                                                </span>
+                                                <div className="font-bold text-lg text-primary">
+                                                    €{product.price.toFixed(2)}
+                                                </div>
+                                            </>
+                                        )}
                                     </div>
 
                                     <Button
