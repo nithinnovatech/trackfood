@@ -48,19 +48,7 @@ const BottomNav = ({ setIsCartOpen }: BottomNavProps) => {
                     <span>Search</span>
                 </Link>
 
-                <button
-                    onClick={() => {
-                        navigate('/');
-                        setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
-                    }}
-                    className={cn(
-                        "flex flex-col items-center justify-center w-full h-full space-y-1 text-xs font-medium transition-colors",
-                        "text-muted-foreground hover:text-primary"
-                    )}
-                >
-                    <Grid className="h-5 w-5" />
-                    <span>Categories</span>
-                </button>
+
 
                 <button
                     onClick={handleAccountClick}
