@@ -11,7 +11,7 @@ const slides = [
     description: "Shop the best quality spices, rice, fresh vegetables, and halal meat.",
     image: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1200",
     color: "bg-green-600",
-    link: "/#menu"
+    link: "/category/fruits-veg"
   },
   {
     id: 2,
@@ -20,7 +20,7 @@ const slides = [
     description: "Get the finest long-grain rice for your biryani and pulao.",
     image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&q=80&w=1200",
     color: "bg-orange-500",
-    link: "/cat/staples"
+    link: "/category/staples"
   },
   {
     id: 3,
@@ -29,7 +29,7 @@ const slides = [
     description: "Fresh chicken, lamb, and beef sourced from trusted farms.",
     image: "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&q=80&w=1200",
     color: "bg-primary",
-    link: "/cat/meat"
+    link: "/category/meat"
   }
 ];
 
@@ -76,11 +76,6 @@ const Hero = () => {
                 <Link to={slide.link}>
                   <Button size="lg" className="rounded-full text-base md:text-lg px-8 py-6 bg-primary hover:bg-primary/90 border-2 border-primary">
                     Shop Now
-                  </Button>
-                </Link>
-                <Link to="/#about">
-                  <Button size="lg" variant="outline" className="rounded-full text-base md:text-lg px-8 py-6 bg-transparent text-white border-white hover:bg-white hover:text-black">
-                    Learn More
                   </Button>
                 </Link>
               </div>

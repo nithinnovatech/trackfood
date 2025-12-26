@@ -150,19 +150,19 @@ const Index = () => {
         </section>
 
         {/* 6. Newsletter / Club */}
-        <section className="py-16 bg-primary text-primary-foreground">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-4">Join Asian Basket  Community Club</h2>
-            <p className="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
+        <section className="py-10 md:py-16 bg-primary text-primary-foreground">
+          <div className="container mx-auto px-4 sm:px-6 text-center">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 md:mb-4">Join Asian Basket Community Club</h2>
+            <p className="text-sm sm:text-base md:text-lg opacity-90 mb-6 md:mb-8 max-w-2xl mx-auto leading-relaxed">
               Receive latest updates about discount offers, new products, and exclusive recipes directly to your inbox.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+            <div className="flex flex-col gap-3 max-w-sm sm:max-w-md mx-auto">
               <input
                 type="email"
                 placeholder="Enter your email address"
-                className="flex-1 h-14 px-5 rounded-full text-foreground border-none focus:ring-2 focus:ring-white shadow-sm text-base"
+                className="w-full h-12 md:h-14 px-4 md:px-5 rounded-full text-foreground border-none focus:ring-2 focus:ring-white shadow-sm text-sm md:text-base"
               />
-              <button className="h-14 px-8 bg-secondary text-secondary-foreground font-bold rounded-full hover:bg-secondary/90 transition-colors shadow-md">
+              <button className="w-full h-12 md:h-14 px-6 md:px-8 bg-secondary text-secondary-foreground font-bold rounded-full hover:bg-secondary/90 transition-colors shadow-md text-sm md:text-base">
                 Subscribe
               </button>
             </div>

@@ -61,12 +61,12 @@ const Header = () => {
                   <hr />
                   <div className="space-y-2">
                     <p className="text-sm font-semibold text-muted-foreground uppercase">Categories</p>
-                    <Link to="/category/fruits-veg" className="block py-2">Fruits & Vegetables</Link>
-                    <Link to="/category/meat" className="block py-2">Meat & Poultry</Link>
-                    <Link to="/category/seafood" className="block py-2">Seafood</Link>
-                    <Link to="/category/staples" className="block py-2">Rice & Flour</Link>
-                    <Link to="/category/dairy" className="block py-2">Dairy & Bakery</Link>
-                    <Link to="/category/snacks" className="block py-2">Snacks & Drinks</Link>
+                    <Link to="/category/fruits-veg" className="block py-2" onClick={() => setIsMobileMenuOpen(false)}>Fruits & Vegetables</Link>
+                    <Link to="/category/meat" className="block py-2" onClick={() => setIsMobileMenuOpen(false)}>Meat & Poultry</Link>
+                    <Link to="/category/seafood" className="block py-2" onClick={() => setIsMobileMenuOpen(false)}>Seafood</Link>
+                    <Link to="/category/staples" className="block py-2" onClick={() => setIsMobileMenuOpen(false)}>Rice & Flour</Link>
+                    <Link to="/category/dairy" className="block py-2" onClick={() => setIsMobileMenuOpen(false)}>Dairy & Bakery</Link>
+                    <Link to="/category/snacks" className="block py-2" onClick={() => setIsMobileMenuOpen(false)}>Snacks & Drinks</Link>
                   </div>
                 </nav>
               </SheetContent>
