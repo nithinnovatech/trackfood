@@ -6,44 +6,51 @@ import BottomNav from '@/components/BottomNav';
 import Cart from '@/components/Cart';
 import CategorySection from '@/components/CategorySection';
 
-// Mock product data - you can expand this later
+// Mock product data - Food Truck Menu Categories
 const allProducts = {
-    'fruits-veg': [
-        { id: "fv1", name: "Fresh Tomatoes - 1kg", price: 3.99, category: "Vegetables", image: "https://images.pexels.com/photos/1327838/pexels-photo-1327838.jpeg?auto=compress&cs=tinysrgb&w=400" },
-        { id: "fv2", name: "Green Apples - 6pcs", price: 4.50, category: "Fruits", image: "https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg?auto=compress&cs=tinysrgb&w=400" },
-        { id: "fv3", name: "Fresh Spinach - Bunch", price: 2.20, category: "Vegetables", image: "https://images.pexels.com/photos/2255935/pexels-photo-2255935.jpeg?auto=compress&cs=tinysrgb&w=400" },
-        { id: "fv4", name: "Bananas - 1kg", price: 2.99, category: "Fruits", image: "https://images.pexels.com/photos/2872755/pexels-photo-2872755.jpeg?auto=compress&cs=tinysrgb&w=400" },
+    'rice-bowls': [
+        { id: "rb1", name: "Korean BBQ Bowl", price: 12.99, category: "Rice Bowls", image: "https://images.pexels.com/photos/2092906/pexels-photo-2092906.jpeg?auto=compress&cs=tinysrgb&w=400" },
+        { id: "rb2", name: "Bulgogi Rice Bowl", price: 13.99, category: "Rice Bowls", image: "https://images.pexels.com/photos/5409020/pexels-photo-5409020.jpeg?auto=compress&cs=tinysrgb&w=400" },
+        { id: "rb3", name: "Spicy Pork Bowl", price: 11.99, category: "Rice Bowls", image: "https://images.pexels.com/photos/1640774/pexels-photo-1640774.jpeg?auto=compress&cs=tinysrgb&w=400" },
     ],
-    'meat': [
-        { id: "m1", name: "Fresh Chicken Breast - 1kg", price: 9.99, category: "Meat", image: "https://images.pexels.com/photos/2338407/pexels-photo-2338407.jpeg?auto=compress&cs=tinysrgb&w=400" },
-        { id: "m2", name: "Lamb Curry Cut - 1kg", price: 16.50, category: "Meat", image: "https://images.pexels.com/photos/3688/food-dinner-lunch-unhealthy.jpg?auto=compress&cs=tinysrgb&w=400" },
-        { id: "m3", name: "Beef Mince - 500g", price: 5.99, category: "Meat", image: "https://images.pexels.com/photos/3688/food-dinner-lunch-unhealthy.jpg?auto=compress&cs=tinysrgb&w=400" },
+    'korean-fried-chicken': [
+        { id: "kfc1", name: "Classic Fried Chicken", price: 10.99, category: "Korean Fried Chicken", image: "https://images.pexels.com/photos/60616/fried-chicken-chicken-fried-crunchy-60616.jpeg?auto=compress&cs=tinysrgb&w=400" },
+        { id: "kfc2", name: "Spicy Gochujang Wings", price: 11.99, category: "Korean Fried Chicken", image: "https://images.pexels.com/photos/2338407/pexels-photo-2338407.jpeg?auto=compress&cs=tinysrgb&w=400" },
+        { id: "kfc3", name: "Honey Garlic Chicken", price: 12.99, category: "Korean Fried Chicken", image: "https://images.pexels.com/photos/6210747/pexels-photo-6210747.jpeg?auto=compress&cs=tinysrgb&w=400" },
     ],
-    'seafood': [
-        { id: "sf1", name: "Fresh Salmon - 500g", price: 12.99, category: "Seafood", image: "https://images.pexels.com/photos/1683545/pexels-photo-1683545.jpeg?auto=compress&cs=tinysrgb&w=400" },
-        { id: "sf2", name: "Prawns - 500g", price: 14.50, category: "Seafood", image: "https://images.pexels.com/photos/725997/pexels-photo-725997.jpeg?auto=compress&cs=tinysrgb&w=400" },
+    'korean-tacos': [
+        { id: "kt1", name: "Bulgogi Tacos (3pcs)", price: 9.99, category: "Korean Tacos", image: "https://images.pexels.com/photos/2092507/pexels-photo-2092507.jpeg?auto=compress&cs=tinysrgb&w=400" },
+        { id: "kt2", name: "Spicy Pork Tacos (3pcs)", price: 9.99, category: "Korean Tacos", image: "https://images.pexels.com/photos/4958641/pexels-photo-4958641.jpeg?auto=compress&cs=tinysrgb&w=400" },
+        { id: "kt3", name: "Chicken Tacos (3pcs)", price: 8.99, category: "Korean Tacos", image: "https://images.pexels.com/photos/7613568/pexels-photo-7613568.jpeg?auto=compress&cs=tinysrgb&w=400" },
     ],
-    'staples': [
-        { id: "r1", name: "Premium Basmati Rice - 5kg", price: 18.99, category: "Pantry", image: "https://images.pexels.com/photos/1393382/pexels-photo-1393382.jpeg?auto=compress&cs=tinysrgb&w=400" },
-        { id: "r2", name: "Sona Masoori Rice - 10kg", price: 24.50, category: "Pantry", image: "https://images.pexels.com/photos/7456426/pexels-photo-7456426.jpeg?auto=compress&cs=tinysrgb&w=400" },
+    'appetizers-sides': [
+        { id: "as1", name: "Korean Fried Dumplings", price: 6.99, category: "Appetizers/Sides", image: "https://images.pexels.com/photos/955137/pexels-photo-955137.jpeg?auto=compress&cs=tinysrgb&w=400" },
+        { id: "as2", name: "Kimchi Fries", price: 5.99, category: "Appetizers/Sides", image: "https://images.pexels.com/photos/1583884/pexels-photo-1583884.jpeg?auto=compress&cs=tinysrgb&w=400" },
+        { id: "as3", name: "Korean Corn Dog", price: 4.99, category: "Appetizers/Sides", image: "https://images.pexels.com/photos/4518655/pexels-photo-4518655.jpeg?auto=compress&cs=tinysrgb&w=400" },
     ],
-    'dairy': [
-        { id: "d1", name: "Fresh Milk - 1L", price: 1.99, category: "Dairy", image: "https://images.pexels.com/photos/248412/pexels-photo-248412.jpeg?auto=compress&cs=tinysrgb&w=400" },
-        { id: "d2", name: "Paneer - 200g", price: 3.50, category: "Dairy", image: "https://images.pexels.com/photos/821365/pexels-photo-821365.jpeg?auto=compress&cs=tinysrgb&w=400" },
+    'kids-friendly': [
+        { id: "kf1", name: "Mini Chicken Bites", price: 6.99, category: "Kids Friendly", image: "https://images.pexels.com/photos/60616/fried-chicken-chicken-fried-crunchy-60616.jpeg?auto=compress&cs=tinysrgb&w=400" },
+        { id: "kf2", name: "Kids Rice Bowl", price: 7.99, category: "Kids Friendly", image: "https://images.pexels.com/photos/1640774/pexels-photo-1640774.jpeg?auto=compress&cs=tinysrgb&w=400" },
     ],
-    'snacks': [
-        { id: "sn1", name: "Potato Chips - 200g", price: 2.99, category: "Snacks", image: "https://images.pexels.com/photos/1583884/pexels-photo-1583884.jpeg?auto=compress&cs=tinysrgb&w=400" },
-        { id: "sn2", name: "Biscuits Pack", price: 3.50, category: "Snacks", image: "https://images.pexels.com/photos/890577/pexels-photo-890577.jpeg?auto=compress&cs=tinysrgb&w=400" },
+    'desserts': [
+        { id: "ds1", name: "Korean Bingsu", price: 7.99, category: "Desserts", image: "https://images.pexels.com/photos/1352270/pexels-photo-1352270.jpeg?auto=compress&cs=tinysrgb&w=400" },
+        { id: "ds2", name: "Hotteok (Sweet Pancake)", price: 4.99, category: "Desserts", image: "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=400" },
+    ],
+    'beverages': [
+        { id: "bv1", name: "Korean Iced Tea", price: 3.99, category: "Beverages", image: "https://images.pexels.com/photos/792613/pexels-photo-792613.jpeg?auto=compress&cs=tinysrgb&w=400" },
+        { id: "bv2", name: "Banana Milk", price: 2.99, category: "Beverages", image: "https://images.pexels.com/photos/1435706/pexels-photo-1435706.jpeg?auto=compress&cs=tinysrgb&w=400" },
+        { id: "bv3", name: "Soda", price: 1.99, category: "Beverages", image: "https://images.pexels.com/photos/2983100/pexels-photo-2983100.jpeg?auto=compress&cs=tinysrgb&w=400" },
     ],
 };
 
 const categoryNames: Record<string, string> = {
-    'fruits-veg': 'Fruits & Vegetables',
-    'meat': 'Meat & Poultry',
-    'seafood': 'Fresh Seafood',
-    'staples': 'Rice & Flour',
-    'dairy': 'Dairy & Bakery',
-    'snacks': 'Snacks & Drinks',
+    'rice-bowls': 'Rice Bowls',
+    'korean-fried-chicken': 'Korean Fried Chicken',
+    'korean-tacos': 'Korean Tacos',
+    'appetizers-sides': 'Appetizers/Sides',
+    'kids-friendly': 'Kids Friendly',
+    'desserts': 'Desserts',
+    'beverages': 'Beverages',
 };
 
 const CategoryPage = () => {
@@ -63,7 +70,7 @@ const CategoryPage = () => {
                 </div>
 
                 {products.length > 0 ? (
-                    <CategorySection title={categoryName} products={products} />
+                    <CategorySection title={categoryName} products={products} categorySlug={id || ''} />
                 ) : (
                     <div className="container mx-auto px-4 py-16 text-center">
                         <p className="text-muted-foreground">No products found in this category.</p>
