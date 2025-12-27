@@ -62,12 +62,11 @@ const CategorySection = ({ title, products, bgColor = 'bg-white', categorySlug }
 
     const scroll = (direction: 'left' | 'right') => {
         if (scrollRef.current) {
-            const { current } = scrollRef.current;
-            const scrollAmount = current.clientWidth * 0.8;
+            const scrollAmount = scrollRef.current.clientWidth * 0.8;
             if (direction === 'left') {
-                current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+                scrollRef.current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
             } else {
-                current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                scrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
             }
         }
     };
