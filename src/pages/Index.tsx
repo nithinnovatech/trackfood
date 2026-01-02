@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
@@ -101,7 +102,7 @@ const Index = () => {
       <Header />
 
       {/* 1. Hero */}
-      <div className="pt-[106px] md:pt-[132px]"> {/* Adjusting for fixed header height */}
+      <div className="pt-[188px] md:pt-[200px]"> {/* Adjusting for fixed header height */}
         <Hero />
       </div>
 
@@ -129,22 +130,22 @@ const Index = () => {
         <section className="py-12 bg-primary/5">
           <div className="container mx-auto px-4">
             <div className="grid md:grid-cols-2 gap-8">
-              <div className="relative rounded-2xl overflow-hidden h-[250px] md:h-[300px] group cursor-pointer">
+              <Link to="/category/fruits-veg" className="relative rounded-2xl overflow-hidden h-[250px] md:h-[300px] group cursor-pointer block">
                 <img src="https://images.unsplash.com/photo-1596560548464-f010549b84d7?auto=format&fit=crop&q=80&w=800" alt="Exotic Fruits" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 <div className="absolute inset-0 bg-black/40 flex flex-col justify-center px-8 z-10">
                   <h3 className="text-3xl font-bold text-white mb-2">Exotic Fruits</h3>
                   <p className="text-white/90 mb-4">Fresh seasonal fruits from around the world.</p>
-                  <button className="w-fit bg-white text-primary px-6 py-2 rounded-full font-bold hover:bg-white/90">Shop Range</button>
+                  <span className="w-fit bg-white text-primary px-6 py-2 rounded-full font-bold hover:bg-white/90">Shop Range</span>
                 </div>
-              </div>
-              <div className="relative rounded-2xl overflow-hidden h-[250px] md:h-[300px] group cursor-pointer">
+              </Link>
+              <Link to="/search?q=Frozen" className="relative rounded-2xl overflow-hidden h-[250px] md:h-[300px] group cursor-pointer block">
                 <img src="https://images.unsplash.com/photo-1564834744159-ff0ea41ba4b9?auto=format&fit=crop&q=80&w=800" alt="Frozen Foods" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 <div className="absolute inset-0 bg-black/40 flex flex-col justify-center px-8 z-10">
                   <h3 className="text-3xl font-bold text-white mb-2">Frozen Essentials</h3>
                   <p className="text-white/90 mb-4">Stock up your freezer with our premium range.</p>
-                  <button className="w-fit bg-white text-primary px-6 py-2 rounded-full font-bold hover:bg-white/90">View All</button>
+                  <span className="w-fit bg-white text-primary px-6 py-2 rounded-full font-bold hover:bg-white/90">View All</span>
                 </div>
-              </div>
+              </Link>
             </div>
           </div>
         </section>

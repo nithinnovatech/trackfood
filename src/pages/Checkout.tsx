@@ -137,7 +137,7 @@ const Checkout = () => {
         return (
             <div className="min-h-screen bg-background">
                 <Header />
-                <main className="pt-24 pb-16 px-4">
+                <main className="pt-[188px] md:pt-[200px] pb-16 px-4">
                     <div className="max-w-2xl mx-auto text-center py-12">
                         <ShoppingBag className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
                         <h1 className="text-2xl font-bold mb-2">Your cart is empty</h1>
@@ -161,7 +161,7 @@ const Checkout = () => {
         return (
             <div className="min-h-screen bg-background">
                 <Header />
-                <main className="pt-24 pb-16 px-4">
+                <main className="pt-[188px] md:pt-[200px] pb-16 px-4">
                     <div className="max-w-2xl mx-auto text-center py-12">
                         <ShoppingBag className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
                         <h1 className="text-2xl font-bold mb-2">Please login to continue</h1>
@@ -253,7 +253,7 @@ const Checkout = () => {
         <div className="min-h-screen bg-background">
             <Header />
 
-            <main className="pt-24 pb-16 px-4">
+            <main className="pt-[188px] md:pt-[200px] pb-16 px-4">
                 <div className="max-w-6xl mx-auto">
                     {/* Back Button */}
                     <Link to="/" className="inline-flex items-center text-muted-foreground hover:text-foreground mb-6">

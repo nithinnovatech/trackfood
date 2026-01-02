@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, Heart, ShoppingBag, User, LogOut, Package, MapPin } from 'lucide-react';
+import { Menu, Heart, ShoppingBag, User, LogOut, Package, MapPin, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import {
@@ -67,6 +67,15 @@ const Header = () => {
                     <Link to="/category/staples" className="block py-2" onClick={() => setIsMobileMenuOpen(false)}>Rice & Flour</Link>
                     <Link to="/category/dairy" className="block py-2" onClick={() => setIsMobileMenuOpen(false)}>Dairy & Bakery</Link>
                     <Link to="/category/snacks" className="block py-2" onClick={() => setIsMobileMenuOpen(false)}>Snacks & Drinks</Link>
+                  </div>
+                  <hr />
+                  <div className="space-y-2">
+                    <p className="text-sm font-semibold text-muted-foreground uppercase">Get in Touch</p>
+                    <Link to="/contact" className="block py-2 text-lg font-medium" onClick={() => setIsMobileMenuOpen(false)}>Contact Us</Link>
+                    <a href="tel:+353899899412" className="flex items-center gap-2 py-2 text-primary font-medium">
+                      <Phone className="h-5 w-5" />
+                      +353 899899412
+                    </a>
                   </div>
                 </nav>
               </SheetContent>

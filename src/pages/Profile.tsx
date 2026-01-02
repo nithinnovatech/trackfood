@@ -45,7 +45,7 @@ const Profile = () => {
         <div className="min-h-screen bg-background">
             <Header />
 
-            <main className="pt-24 pb-16 px-4">
+            <main className="pt-[188px] md:pt-[200px] pb-16 px-4">
                 <div className="max-w-2xl mx-auto">
                     {/* Back Button */}
                     <Link to="/" className="inline-flex items-center text-muted-foreground hover:text-foreground mb-6">

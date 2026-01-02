@@ -29,7 +29,7 @@ const PaymentSuccess = () => {
         <div className="min-h-screen bg-gradient-to-br from-green-50 via-background to-blue-50">
             <Header />
 
-            <main className="pt-24 pb-16 px-4">
+            <main className="pt-[188px] md:pt-[200px] pb-16 px-4">
                 <div className="max-w-2xl mx-auto text-center">
                     {/* Success Animation */}
                     <div className="mb-8">

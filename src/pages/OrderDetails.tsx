@@ -25,7 +25,7 @@ const OrderDetails = () => {
         return (
             <div className="min-h-screen bg-background">
                 <Header />
-                <main className="pt-24 pb-16 px-4">
+                <main className="pt-[188px] md:pt-[200px] pb-16 px-4">
                     <div className="max-w-2xl mx-auto text-center py-12">
                         <Package className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
                         <h1 className="text-2xl font-bold mb-2">Order Not Found</h1>
@@ -49,7 +49,7 @@ const OrderDetails = () => {
         <div className="min-h-screen bg-background">
             <Header />
 
-            <main className="pt-24 pb-16 px-4">
+            <main className="pt-[188px] md:pt-[200px] pb-16 px-4">
                 <div className="max-w-3xl mx-auto">
                     {/* Back Button */}
                     <Link to="/orders" className="inline-flex items-center text-muted-foreground hover:text-foreground mb-6">
@@ -141,7 +141,7 @@ const OrderDetails = () => {
                                         <div className="flex justify-between text-sm">
                                             <span className="text-muted-foreground">Status</span>
                                             <span className={`font-semibold ${order.paymentStatus === 'paid' ? 'text-green-600' :
-                                                    order.paymentStatus === 'failed' ? 'text-red-600' : 'text-yellow-600'
+                                                order.paymentStatus === 'failed' ? 'text-red-600' : 'text-yellow-600'
                                                 }`}>
                                                 {order.paymentStatus.charAt(0).toUpperCase() + order.paymentStatus.slice(1)}
                                             </span>

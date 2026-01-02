@@ -63,7 +63,7 @@ const CategoryPage = () => {
         <div className="min-h-screen bg-background pb-16 md:pb-0">
             <Header />
 
-            <div className="pt-[106px] md:pt-[132px]">
+            <div className="pt-[188px] md:pt-[200px]">
                 <div className="container mx-auto px-4 py-8">
                     <h1 className="text-3xl font-bold mb-2 text-primary">{categoryName}</h1>
                     <p className="text-muted-foreground mb-8">Browse our selection of {categoryName.toLowerCase()}</p>
